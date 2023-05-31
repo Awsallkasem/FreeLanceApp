@@ -16,42 +16,33 @@ exports.UserService = void 0;
 const common_1 = require("@nestjs/common");
 const sequelize_1 = require("@nestjs/sequelize");
 const user_model_1 = require("../database/models/user.model");
-const typeorm_1 = require("typeorm");
+const Publish_model_1 = require("../database/models/Publish.model");
+const class_validator_1 = require("class-validator");
+const jwt_1 = require("@nestjs/jwt");
 let UserService = class UserService {
-    constructor(userModel, userRepository) {
+    constructor(userModel, publishModel, jwtService) {
         this.userModel = userModel;
-        this.userRepository = userRepository;
+        this.publishModel = publishModel;
+        this.jwtService = jwtService;
     }
-    async createUser(user) {
-        return await this.userModel.create(user);
-    }
-    async findById(id) {
-        return await this.userModel.findByPk(id);
-    }
-    async findByEmail(email) {
-        const user = await this.userRepository.findOne({
-            where: { email: email },
-        });
-        if (user) {
-            return user.dataValues;
+    async createPost(published, user) {
+        const validationErrors = await (0, class_validator_1.validate)(new Publish_model_1.Published(published));
+        if (validationErrors.length > 0) {
+            const errorMessages = validationErrors.map((error) => Object.values(error.constraints));
+            throw new common_1.BadRequestException(errorMessages);
         }
-        else
-            return null;
+        published.userId = user.id;
+        return await this.publishModel.create(published);
     }
-    async update(id, user) {
-        return this.userModel.update(user, {
-            where: { id },
-            returning: true,
-        });
-    }
-    async delete(id) {
-        return this.userModel.destroy({ where: { id } });
+    async getMyPost(id) {
+        return await this.publishModel.findAll({ where: { userId: id }, include: [user_model_1.User] });
     }
 };
 UserService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, sequelize_1.InjectModel)(user_model_1.User)),
-    __metadata("design:paramtypes", [Object, typeorm_1.Repository])
+    __param(1, (0, sequelize_1.InjectModel)(Publish_model_1.Published)),
+    __metadata("design:paramtypes", [Object, Object, jwt_1.JwtService])
 ], UserService);
 exports.UserService = UserService;
 //# sourceMappingURL=user.service.js.map

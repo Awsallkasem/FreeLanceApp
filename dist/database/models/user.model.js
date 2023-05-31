@@ -9,33 +9,24 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.User = exports.JobTittle = exports.UserRole = void 0;
+exports.User = exports.UserRole = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript");
 const class_validator_1 = require("class-validator");
-const typeorm_1 = require("typeorm");
+const Publish_model_1 = require("./Publish.model");
+const freeLance_model_1 = require("./freeLance.model");
+const rank_model_1 = require("./rank.model");
 var UserRole;
 (function (UserRole) {
     UserRole["ADMIN"] = "admin";
     UserRole["USER"] = "user";
     UserRole["FreeLnce"] = "freelance";
-    UserRole["SuperAdmin"] = "superadmin";
 })(UserRole = exports.UserRole || (exports.UserRole = {}));
-var JobTittle;
-(function (JobTittle) {
-    JobTittle["BackEndDeveloper"] = "backend-developer";
-    JobTittle["FrontEndDeveloper"] = "frontend-developer";
-    JobTittle["SystemAnalyzer"] = "system_analyzer";
-})(JobTittle = exports.JobTittle || (exports.JobTittle = {}));
 let User = class User extends sequelize_typescript_1.Model {
-    static async IsRequired(instance) {
-        if (instance.role == UserRole.FreeLnce) {
-            if (!instance.link && !instance.jobTittle)
-                throw new Error('Required value is missing');
-        }
-    }
 };
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
+    sequelize_typescript_1.PrimaryKey,
+    sequelize_typescript_1.AutoIncrement,
+    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.INTEGER),
     __metadata("design:type", Number)
 ], User.prototype, "id", void 0);
 __decorate([
@@ -88,19 +79,17 @@ __decorate([
     __metadata("design:type", Boolean)
 ], User.prototype, "isBlocked", void 0);
 __decorate([
-    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.STRING }),
-    __metadata("design:type", String)
-], User.prototype, "link", void 0);
+    (0, sequelize_typescript_1.HasMany)(() => Publish_model_1.Published),
+    __metadata("design:type", Array)
+], User.prototype, "publisheds", void 0);
 __decorate([
-    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.ENUM(...Object.values(JobTittle)) }),
-    __metadata("design:type", String)
-], User.prototype, "jobTittle", void 0);
+    (0, sequelize_typescript_1.HasOne)(() => freeLance_model_1.FreeLance),
+    __metadata("design:type", freeLance_model_1.FreeLance)
+], User.prototype, "freeLances", void 0);
 __decorate([
-    sequelize_typescript_1.BeforeCreate,
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [User]),
-    __metadata("design:returntype", Promise)
-], User, "IsRequired", null);
+    (0, sequelize_typescript_1.HasMany)(() => rank_model_1.Rank),
+    __metadata("design:type", Array)
+], User.prototype, "ranks", void 0);
 User = __decorate([
     (0, sequelize_typescript_1.Table)({ tableName: 'users' })
 ], User);

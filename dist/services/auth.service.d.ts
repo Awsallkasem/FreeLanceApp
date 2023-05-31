@@ -1,11 +1,12 @@
 import { User } from '../database/models/user.model';
 import { JwtService } from '@nestjs/jwt';
-import { Repository } from 'typeorm';
+import { FreeLance } from 'src/database/models/freeLance.model';
 export declare class AuthService {
-    private readonly userRepository;
+    private userModel;
+    private FreeLacneModele;
     private readonly jwtService;
-    constructor(userRepository: Repository<User>, jwtService: JwtService);
-    register(user: User): Promise<{
+    constructor(userModel: typeof User, FreeLacneModele: typeof FreeLance, jwtService: JwtService);
+    register(user: User, freeLance: FreeLance): Promise<{
         user: User;
         token: string;
     }>;

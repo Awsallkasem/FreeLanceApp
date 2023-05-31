@@ -5,12 +5,12 @@ import { User, UserRole } from "src/database/models/user.model";
 
 @Injectable()
 export class AdminMiddleware implements NestMiddleware {
-    constructor() { }
+  constructor() { }
 
- async use(req, res, next: NextFunction) {
-  if(req.body.user.role!=UserRole.ADMIN||req.body.user.isBlocked){
-    return res.status(403).json({message:'access denied'});  
-  }
-  next();
+  async use(req, res, next: NextFunction) {
+    if (req.body.user.role != UserRole.ADMIN || req.body.user.isBlocked) {
+      return res.status(403).json({ message: 'access denied' });
+    }
+    next();
   }
 }

@@ -10,12 +10,11 @@ exports.AdminModule = void 0;
 const common_1 = require("@nestjs/common");
 const admin_controller_1 = require("../controllers/admin.controller");
 const admin_service_1 = require("../services/admin.service");
-const user_model_1 = require("../database/models/user.model");
-const sequelize_1 = require("@nestjs/sequelize");
 const decodeToken_middleware_1 = require("../middlewares/authrization/decodeToken.middleware");
 const admin_middleware_1 = require("../middlewares/authrization/admin.middleware");
 const jwt_1 = require("@nestjs/jwt");
 const auth_service_1 = require("../services/auth.service");
+const database_module_1 = require("../database/database.module");
 let AdminModule = class AdminModule {
     configure(consumer) {
         consumer.apply(decodeToken_middleware_1.decodeTokenMiddleware)
@@ -27,7 +26,7 @@ let AdminModule = class AdminModule {
 AdminModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            sequelize_1.SequelizeModule.forFeature([user_model_1.User]),
+            database_module_1.DatabaseModule,
             jwt_1.JwtModule.register({
                 secret: 'yasdmfy',
                 signOptions: { expiresIn: '1h' },

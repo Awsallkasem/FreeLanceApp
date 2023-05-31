@@ -9,12 +9,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DatabaseModule = void 0;
 const common_1 = require("@nestjs/common");
 const database_providers_1 = require("./database.providers");
+const sequelize_1 = require("@nestjs/sequelize");
+const user_model_1 = require("./models/user.model");
+const Publish_model_1 = require("./models/Publish.model");
+const rank_model_1 = require("./models/rank.model");
+const freeLance_model_1 = require("./models/freeLance.model");
 let DatabaseModule = class DatabaseModule {
 };
 DatabaseModule = __decorate([
     (0, common_1.Module)({
+        imports: [sequelize_1.SequelizeModule.forFeature([user_model_1.User, Publish_model_1.Published, rank_model_1.Rank, freeLance_model_1.FreeLance])],
         providers: [...database_providers_1.databaseProviders],
-        exports: [...database_providers_1.databaseProviders],
+        exports: [...database_providers_1.databaseProviders, sequelize_1.SequelizeModule],
     })
 ], DatabaseModule);
 exports.DatabaseModule = DatabaseModule;

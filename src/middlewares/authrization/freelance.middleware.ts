@@ -5,15 +5,15 @@ import { User, UserRole } from "src/database/models/user.model";
 
 @Injectable()
 export class FreeLanceMiddleware implements NestMiddleware {
-    constructor() { }
+  constructor() { }
 
- async use(req, res, next: NextFunction) {
-  if(req.body.user.role!=UserRole.FreeLnce||req.body.user.isBlocked||!req.body.user.isActive){
-    return res.status(403).json({message:'access denied'});  
-  }
-  next();
+  async use(req, res, next: NextFunction) {
+    if (req.body.user.role != UserRole.FreeLnce || req.body.user.isBlocked || !req.body.user.isActive) {
+      return res.status(403).json({ message: 'access denied' });
+    }
+    next();
 
-    
+
 
   }
 }

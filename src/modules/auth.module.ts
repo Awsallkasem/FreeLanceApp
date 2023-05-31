@@ -4,17 +4,21 @@ import { AuthController } from '../controllers/auth.controller';
 import { AuthService } from '../services/auth.service';
 import { User } from '../database/models/user.model';
 import { SequelizeModule } from '@nestjs/sequelize';
+import { FreeLance } from 'src/database/models/freeLance.model';
+import { Rank } from 'src/database/models/rank.model';
+import { Published } from 'src/database/models/Publish.model';
+import { DatabaseModule } from 'src/database/database.module';
 
 @Module({
   imports: [
-    SequelizeModule.forFeature([User]),
+    DatabaseModule,
     JwtModule.register({
       secret: 'your-secret-key',
       signOptions: { expiresIn: '1h' },
-      }),
-      
+    }),
+
   ],
   controllers: [AuthController],
   providers: [AuthService],
 })
-export class AuthModule {}
+export class AuthModule { }

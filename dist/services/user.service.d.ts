@@ -1,12 +1,11 @@
 import { User } from '../database/models/user.model';
-import { Repository } from 'typeorm';
+import { Published } from 'src/database/models/Publish.model';
+import { JwtService } from '@nestjs/jwt';
 export declare class UserService {
     private userModel;
-    private readonly userRepository;
-    constructor(userModel: typeof User, userRepository: Repository<User>);
-    createUser(user: User): Promise<User>;
-    findById(id: number): Promise<User>;
-    findByEmail(email: string): Promise<User | null>;
-    update(id: number, user: User): Promise<[number, User[]]>;
-    delete(id: number): Promise<number>;
+    private publishModel;
+    private readonly jwtService;
+    constructor(userModel: typeof User, publishModel: typeof Published, jwtService: JwtService);
+    createPost(published: Published, user: User): Promise<Published>;
+    getMyPost(id: string): Promise<Published[]>;
 }

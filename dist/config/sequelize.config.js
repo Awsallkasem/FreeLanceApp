@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const sequelizeConfig = {
+exports.sequelizeConfig = void 0;
+exports.sequelizeConfig = {
     dialect: 'mysql',
     host: 'localhost',
     port: 3306,
@@ -10,5 +11,4 @@ const sequelizeConfig = {
     autoLoadModels: true,
     synchronize: true,
 };
-exports.default = sequelizeConfig;
 //# sourceMappingURL=sequelize.config.js.map

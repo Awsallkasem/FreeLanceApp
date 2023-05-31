@@ -6,54 +6,54 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class AdminService {
-    constructor(
-        @InjectRepository(User)
-         private readonly userRepository: Repository<User>,
-        private readonly jwtService: JwtService,
-      ) {}
+  constructor(
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+    private readonly jwtService: JwtService,
+  ) { }
 
 
-  
-   async showAllRequest(): Promise<User | null> {
+
+  async showAllRequest(): Promise<User | null> {
     const user = await this.userRepository.findOne({
-        where:{isActive:false,isReject:false,role:UserRole.FreeLnce}
-      });
-    if(user){
+      where: { isActive: false, isReject: false, role: UserRole.FreeLnce }
+    });
+    if (user) {
       return user.dataValues;
-  
+
     }
     else
-    return null;
-   }
-   async acceptRequest(id:number){
-    const user =await this.findUserByIs(id);
+      return null;
+  }
+  async acceptRequest(id: number) {
+    const user = await this.findUserByIs(id);
 
-      user.isActive=true;
-      return await user.save();
-   }
+    user.isActive = true;
+    return await user.save();
+  }
 
-   async rejectRequest(id:number){
-    const user =await this.findUserByIs(id);
-         user.isReject=true;
-      
-      return await user.save();
-   }
+  async rejectRequest(id: number) {
+    const user = await this.findUserByIs(id);
+    user.isReject = true;
 
-   async blockUser(id:number){
-    const user =await this.findUserByIs(id);
-    if(user.role==UserRole.ADMIN){
+    return await user.save();
+  }
+
+  async blockUser(id: number) {
+    const user = await this.findUserByIs(id);
+    if (user.role == UserRole.ADMIN) {
       throw new UnauthorizedException('access denied');
     }
-         user.isBlocked=true;  
-      return await user.save();
-   }
-
-   async findUserByIs(id){
-    const user = await this.userRepository.findOne({
-      where:{id:id},
-    });
- return user;
-   }
-    
+    user.isBlocked = true;
+    return await user.save();
   }
+
+  async findUserByIs(id) {
+    const user = await this.userRepository.findOne({
+      where: { id: id },
+    });
+    return user;
+  }
+
+}
 

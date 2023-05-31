@@ -1,5 +1,8 @@
 import { Sequelize } from 'sequelize-typescript';
 import { User } from 'src/database/models/user.model';
+import { Published } from './models/Publish.model';
+import { Rank } from './models/rank.model';
+import { FreeLance } from './models/freeLance.model';
 
 export const databaseProviders = [
   {
@@ -13,7 +16,8 @@ export const databaseProviders = [
         password: 'free',
         database: 'free',
       });
-      sequelize.addModels([User]);
+
+      sequelize.addModels([User, Published,Rank,FreeLance]);
       await sequelize.sync();
       return sequelize;
     },

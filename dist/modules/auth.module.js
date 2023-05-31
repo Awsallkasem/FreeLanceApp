@@ -11,14 +11,13 @@ const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
 const auth_controller_1 = require("../controllers/auth.controller");
 const auth_service_1 = require("../services/auth.service");
-const user_model_1 = require("../database/models/user.model");
-const sequelize_1 = require("@nestjs/sequelize");
+const database_module_1 = require("../database/database.module");
 let AuthModule = class AuthModule {
 };
 AuthModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            sequelize_1.SequelizeModule.forFeature([user_model_1.User]),
+            database_module_1.DatabaseModule,
             jwt_1.JwtModule.register({
                 secret: 'your-secret-key',
                 signOptions: { expiresIn: '1h' },

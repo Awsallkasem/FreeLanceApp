@@ -9,7 +9,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const sequelize_1 = require("@nestjs/sequelize");
-const auth_module_1 = require("./modules/auth.module");
 const sequelize_config_1 = require("./config/sequelize.config");
 const database_module_1 = require("./database/database.module");
 const user_module_1 = require("./modules/user.module");
@@ -19,9 +18,9 @@ let AppModule = class AppModule {
 AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            sequelize_1.SequelizeModule.forRoot(sequelize_config_1.default),
+            sequelize_1.SequelizeModule.forRoot(sequelize_config_1.sequelizeConfig),
+            database_module_1.DatabaseModule,
             user_module_1.UserModule,
-            auth_module_1.AuthModule,
             admin_module_1.AdminModule,
             database_module_1.DatabaseModule
         ],

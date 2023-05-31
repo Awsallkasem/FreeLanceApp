@@ -1,6 +1,6 @@
 import { SequelizeModuleOptions } from '@nestjs/sequelize';
 
-const sequelizeConfig: SequelizeModuleOptions = {
+export const sequelizeConfig: SequelizeModuleOptions = {
   dialect: 'mysql',
   host: 'localhost',
   port: 3306,
@@ -11,4 +11,4 @@ const sequelizeConfig: SequelizeModuleOptions = {
   synchronize: true,
 };
 
-export default sequelizeConfig;
+

@@ -16,14 +16,16 @@ exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
 const auth_service_1 = require("../services/auth.service");
 const user_model_1 = require("../database/models/user.model");
+const freeLance_model_1 = require("../database/models/freeLance.model");
 let AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
     }
-    async register(user, res) {
+    async register(user, freeLance, res) {
         try {
             const createUser = new user_model_1.User(user);
-            const newUser = await this.authService.register(createUser.dataValues);
+            const createFreeLance = new freeLance_model_1.FreeLance(freeLance);
+            const newUser = await this.authService.register(createUser.dataValues, createFreeLance.dataValues);
             res.setHeader('Authorization', newUser.token);
             return res.status(201).json({ message: 'User registered successfully', user: newUser.user });
         }
@@ -46,10 +48,11 @@ let AuthController = class AuthController {
 };
 __decorate([
     (0, common_1.Post)('register'),
-    __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.Response)()),
+    __param(0, (0, common_1.Body)('user')),
+    __param(1, (0, common_1.Body)('freeLance')),
+    __param(2, (0, common_1.Response)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [user_model_1.User, Object]),
+    __metadata("design:paramtypes", [user_model_1.User, freeLance_model_1.FreeLance, Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "register", null);
 __decorate([

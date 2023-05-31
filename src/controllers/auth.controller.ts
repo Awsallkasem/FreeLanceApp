@@ -1,19 +1,20 @@
 import { Controller, Post, Body,Response,Request, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { AuthService } from '../services/auth.service';
 import { User } from '../database/models/user.model';
-import { validate } from 'class-validator';
+import { FreeLance } from 'src/database/models/freeLance.model';
+import { Console } from 'console';
 
-@Controller('api/auth')
+  @Controller('api/auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) { }
 
 
   @Post('register')
-  async register(@Body() user: User,@Response() res) {
+  async register(@Body('user') user: User,@Body('freeLance') freeLance:FreeLance,@Response() res) {
 try{
     const createUser = new User(user);
-   
-    const newUser = await this.authService.register(createUser.dataValues);
+const createFreeLance=new FreeLance(freeLance);
+    const newUser = await this.authService.register(createUser.dataValues,createFreeLance.dataValues);
     res.setHeader('Authorization',  newUser.token);
     return res.status(201).json({ message: 'User registered successfully', user: newUser.user} );
   }catch(err){

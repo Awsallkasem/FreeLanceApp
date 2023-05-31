@@ -1,14 +1,10 @@
 import { Model } from 'sequelize-typescript';
+import { Published } from './Publish.model';
+import { FreeLance } from './freeLance.model';
 export declare enum UserRole {
     ADMIN = "admin",
     USER = "user",
-    FreeLnce = "freelance",
-    SuperAdmin = "superadmin"
-}
-export declare enum JobTittle {
-    BackEndDeveloper = "backend-developer",
-    FrontEndDeveloper = "frontend-developer",
-    SystemAnalyzer = "system_analyzer"
+    FreeLnce = "freelance"
 }
 export interface UserAttributes {
     id: number;
@@ -32,7 +28,7 @@ export declare class User extends Model<User> implements UserAttributes {
     isActive: boolean;
     isReject: boolean;
     isBlocked: boolean;
-    link: string;
-    jobTittle: JobTittle;
-    static IsRequired(instance: User): Promise<void>;
+    publisheds: Published[];
+    freeLances: FreeLance;
+    ranks: Published[];
 }
