@@ -18,34 +18,52 @@ export class UserService {
     @InjectModel(Published)
     private publishModel: typeof Published,
     @InjectModel(Service)
-    private readonly serviceModele:typeof Service,
+    private readonly serviceModele: typeof Service,
     private readonly jwtService: JwtService,
 
   ) { }
 
-  async createPost(published: Published,user:User): Promise<Published> {
-    published.userId=user.id;
+  async createPost(published: Published, user: User): Promise<Published> {
+    published.userId = user.id;
 
     const validationErrors = await validate(new Published(published));
     if (validationErrors.length > 0) {
       const errorMessages = validationErrors.map((error) => Object.values(error.constraints));
       throw new BadRequestException(errorMessages);
     }
-return await this.publishModel.create(published);
+    return await this.publishModel.create(published);
   }
-  async getMyPost(id :string){
-    return await this.publishModel.findAll({where:{userId:id},include:[User]});
+  async getMyPost(id: string) {
+    return await this.publishModel.findAll({ where: { userId: id }, include: [User] });
 
   }
 
-  async servicesOnPost(id: number):Promise<Service[]>{
-const service=await this.serviceModele.findAll({where:{
-  publishedId:id
-}});
-if(!service){
-  throw new NotFoundException;
-}
-return service;
+  async servicesOnPost(id: number): Promise<Service[]> {
+    const published=await this.publishModel.findByPk(id);
+    if(!published){
+      throw new NotFoundException('post not fouund'); 
+    }
+    const service = await this.serviceModele.findAll({
+      where: {
+        publishedId: id
+      },
+       include: [
+        {
+          model: Published,
+          include: [
+            {
+              model: User,
+              attributes: { exclude: ['password','updatedAt','createdAt','isBlocked','isReject','isActive'] },
+            },
+          ],
+        },
+      ],
+    });
+
+    if (!service) {
+      throw new NotFoundException('service not found');
+    }
+    return service;
   }
 
 

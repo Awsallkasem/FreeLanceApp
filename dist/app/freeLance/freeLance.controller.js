@@ -20,12 +20,39 @@ let FreeLanceController = class FreeLanceController {
     constructor(freeLanceService) {
         this.freeLanceService = freeLanceService;
     }
+    async getAllPost(res) {
+        const posts = await this.freeLanceService.getAllPost();
+        return res.status(200).json({ posts: posts });
+    }
+    async getAllPostByCategory(category, res) {
+        const posts = await this.freeLanceService.getAllPostByCategory(category);
+        return res.status(200).json({ posts: posts });
+    }
     async addService(id, service, req, res) {
         const createService = new service_model_1.Service(service);
         const newService = await this.freeLanceService.addService(createService.dataValues, req.body.user.id, parseInt(id));
         return res.status(201).json({ message: 'Service createred secussefully', service: newService });
     }
+    async checkMyService(req, res) {
+        const myService = await this.freeLanceService.checkMyService(req.body.user.id);
+        return res.status(200).json({ service: myService });
+    }
 };
+__decorate([
+    (0, common_1.Get)('getAllPost'),
+    __param(0, (0, common_1.Response)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], FreeLanceController.prototype, "getAllPost", null);
+__decorate([
+    (0, common_1.Get)('getAllPostByCategory/:category'),
+    __param(0, (0, common_1.Param)()),
+    __param(1, (0, common_1.Response)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], FreeLanceController.prototype, "getAllPostByCategory", null);
 __decorate([
     (0, common_1.Post)('addService/:id'),
     __param(0, (0, common_1.Param)('id')),
@@ -36,6 +63,14 @@ __decorate([
     __metadata("design:paramtypes", [String, service_model_1.Service, Object, Object]),
     __metadata("design:returntype", Promise)
 ], FreeLanceController.prototype, "addService", null);
+__decorate([
+    (0, common_1.Get)('checkMyService'),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Response)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], FreeLanceController.prototype, "checkMyService", null);
 FreeLanceController = __decorate([
     (0, common_1.Controller)('api/freeLace/'),
     __metadata("design:paramtypes", [freeLance_service_1.FreeLanceService])

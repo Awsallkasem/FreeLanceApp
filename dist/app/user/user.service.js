@@ -40,11 +40,28 @@ let UserService = class UserService {
         return await this.publishModel.findAll({ where: { userId: id }, include: [user_model_1.User] });
     }
     async servicesOnPost(id) {
-        const service = await this.serviceModele.findAll({ where: {
+        const published = await this.publishModel.findByPk(id);
+        if (!published) {
+            throw new common_1.NotFoundException('post not fouund');
+        }
+        const service = await this.serviceModele.findAll({
+            where: {
                 publishedId: id
-            } });
+            },
+            include: [
+                {
+                    model: Publish_model_1.Published,
+                    include: [
+                        {
+                            model: user_model_1.User,
+                            attributes: { exclude: ['password', 'updatedAt', 'createdAt', 'isBlocked', 'isReject', 'isActive'] },
+                        },
+                    ],
+                },
+            ],
+        });
         if (!service) {
-            throw new common_1.NotFoundException;
+            throw new common_1.NotFoundException('service not found');
         }
         return service;
     }
