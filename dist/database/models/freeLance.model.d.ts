@@ -1,6 +1,7 @@
 import { Model } from 'sequelize-typescript';
 import { User } from './user.model';
 import { Rank } from './rank.model';
+import { Service } from './service.model';
 export declare enum JobTittle {
     BackEndDeveloper = "backend-developer",
     FrontEndDeveloper = "frontend-developer",
@@ -17,4 +18,5 @@ export declare class FreeLance extends Model<FreeLance> {
     userId: number;
     user: User;
     ranks: Rank[];
+    services: Service[];
 }

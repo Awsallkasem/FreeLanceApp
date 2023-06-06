@@ -1,6 +1,7 @@
-import { Model, Table, Column, DataType, BeforeCreate, BelongsTo, ForeignKey, AutoIncrement, PrimaryKey } from 'sequelize-typescript';
+import { Model, Table, Column, DataType, BeforeCreate, BelongsTo, ForeignKey, AutoIncrement, PrimaryKey, HasMany } from 'sequelize-typescript';
 import { IsNotEmpty } from 'class-validator';
 import { User } from './user.model';
+import { Service } from './service.model';
 
 @Table({ tableName: 'publish' })
 export class Published extends Model<Published>  {
@@ -20,6 +21,9 @@ export class Published extends Model<Published>  {
   @Column({ type: DataType.STRING })
   fileType: string;
 
+  @HasMany(() => Service)
+  services: Service[];
+
 
   @ForeignKey(() => User)
   @Column({type :DataType.INTEGER,allowNull:false})
@@ -28,6 +32,8 @@ export class Published extends Model<Published>  {
 
   @BelongsTo(() => User)
   user: User;
+
+  
 
   @BeforeCreate
   static async IsRequired(instance: Published) {

@@ -11,7 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.decodeTokenMiddleware = void 0;
 const common_1 = require("@nestjs/common");
-const auth_service_1 = require("../../services/auth.service");
+const auth_service_1 = require("../../app/auth/auth.service");
 let decodeTokenMiddleware = class decodeTokenMiddleware {
     constructor(authService) {
         this.authService = authService;
@@ -23,6 +23,9 @@ let decodeTokenMiddleware = class decodeTokenMiddleware {
             return res.status(403).json({ message: 'access denied' });
         }
         const user = await this.authService.findByEmail(decodedToken.email);
+        if (!user) {
+            return res.status(404).json({ message: 'user not found' });
+        }
         req.body.user = user;
         next();
     }

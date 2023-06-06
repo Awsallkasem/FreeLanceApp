@@ -14,6 +14,7 @@ const sequelize_typescript_1 = require("sequelize-typescript");
 const class_validator_1 = require("class-validator");
 const user_model_1 = require("./user.model");
 const rank_model_1 = require("./rank.model");
+const service_model_1 = require("./service.model");
 var JobTittle;
 (function (JobTittle) {
     JobTittle["BackEndDeveloper"] = "backend-developer";
@@ -67,6 +68,10 @@ __decorate([
     (0, sequelize_typescript_1.HasMany)(() => rank_model_1.Rank),
     __metadata("design:type", Array)
 ], FreeLance.prototype, "ranks", void 0);
+__decorate([
+    (0, sequelize_typescript_1.HasMany)(() => service_model_1.Service),
+    __metadata("design:type", Array)
+], FreeLance.prototype, "services", void 0);
 FreeLance = __decorate([
     (0, sequelize_typescript_1.Table)({ tableName: 'freeLance' })
 ], FreeLance);

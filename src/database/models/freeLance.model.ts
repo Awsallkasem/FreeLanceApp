@@ -2,6 +2,8 @@ import { Model, Table, Column, DataType, BeforeCreate, BelongsTo, ForeignKey, Au
 import { IsNotEmpty } from 'class-validator';
 import { User } from './user.model';
 import { Rank } from './rank.model';
+import { Service } from './service.model';
+// import { File } from './file.model';
 
 
 
@@ -49,5 +51,9 @@ number:number
 
   @HasMany(() => Rank)
   ranks: Rank[];
+  
+  
+  @HasMany(() => Service)
+  services: Service[];
 
   }

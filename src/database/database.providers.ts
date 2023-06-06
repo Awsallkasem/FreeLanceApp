@@ -3,6 +3,7 @@ import { User } from 'src/database/models/user.model';
 import { Published } from './models/Publish.model';
 import { Rank } from './models/rank.model';
 import { FreeLance } from './models/freeLance.model';
+import { Service } from './models/service.model';
 
 export const databaseProviders = [
   {
@@ -15,9 +16,10 @@ export const databaseProviders = [
         username: 'free',
         password: 'free',
         database: 'free',
+        logging:false
       });
 
-      sequelize.addModels([User, Published,Rank,FreeLance]);
+      sequelize.addModels([User, Published,Rank,Service,FreeLance]);
       await sequelize.sync();
       return sequelize;
     },

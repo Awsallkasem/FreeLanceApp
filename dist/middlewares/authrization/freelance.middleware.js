@@ -15,6 +15,9 @@ const user_model_1 = require("../../database/models/user.model");
 let FreeLanceMiddleware = class FreeLanceMiddleware {
     constructor() { }
     async use(req, res, next) {
+        if (req.body.user.role == user_model_1.UserRole.ADMIN) {
+            next();
+        }
         if (req.body.user.role != user_model_1.UserRole.FreeLnce || req.body.user.isBlocked || !req.body.user.isActive) {
             return res.status(403).json({ message: 'access denied' });
         }

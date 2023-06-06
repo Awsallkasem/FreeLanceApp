@@ -13,6 +13,7 @@ exports.Published = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript");
 const class_validator_1 = require("class-validator");
 const user_model_1 = require("./user.model");
+const service_model_1 = require("./service.model");
 let Published = class Published extends sequelize_typescript_1.Model {
     static async IsRequired(instance) {
         if (instance.fileName) {
@@ -40,6 +41,10 @@ __decorate([
     (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.STRING }),
     __metadata("design:type", String)
 ], Published.prototype, "fileType", void 0);
+__decorate([
+    (0, sequelize_typescript_1.HasMany)(() => service_model_1.Service),
+    __metadata("design:type", Array)
+], Published.prototype, "services", void 0);
 __decorate([
     (0, sequelize_typescript_1.ForeignKey)(() => user_model_1.User),
     (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.INTEGER, allowNull: false }),

@@ -11,8 +11,9 @@ const common_1 = require("@nestjs/common");
 const sequelize_1 = require("@nestjs/sequelize");
 const sequelize_config_1 = require("./config/sequelize.config");
 const database_module_1 = require("./database/database.module");
-const user_module_1 = require("./modules/user.module");
-const admin_module_1 = require("./modules/admin.module");
+const user_module_1 = require("./app/user/user.module");
+const admin_module_1 = require("./app/admin/admin.module");
+const freeLance_module_1 = require("./app/freeLance/freeLance.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -21,8 +22,8 @@ AppModule = __decorate([
             sequelize_1.SequelizeModule.forRoot(sequelize_config_1.sequelizeConfig),
             database_module_1.DatabaseModule,
             user_module_1.UserModule,
+            freeLance_module_1.FreeLacneModule,
             admin_module_1.AdminModule,
-            database_module_1.DatabaseModule
         ],
     })
 ], AppModule);

@@ -24,7 +24,7 @@ let HttpExceptionFilter = class HttpExceptionFilter {
     }
 };
 HttpExceptionFilter = __decorate([
-    (0, common_1.Catch)(common_1.BadRequestException)
+    (0, common_1.Catch)(common_1.BadRequestException, common_1.NotFoundException)
 ], HttpExceptionFilter);
 exports.HttpExceptionFilter = HttpExceptionFilter;
 //# sourceMappingURL=global-exception.filter.js.map

@@ -6,10 +6,11 @@ import { Published } from './models/Publish.model';
 import { Rank } from './models/rank.model';
 import { FreeLance } from './models/freeLance.model';
 import { Sequelize } from 'sequelize';
+import { Service } from './models/service.model';
 
 
 @Module({
-  imports:[SequelizeModule.forFeature([User,Published,Rank,FreeLance])],
+  imports:[SequelizeModule.forFeature([User,Published,Rank,Service,FreeLance])],
   providers: [...databaseProviders],
   exports: [...databaseProviders,SequelizeModule],
 })
