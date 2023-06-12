@@ -60,6 +60,7 @@ export class FreeLanceService {
     }
     const user = await this.UserModel.findOne({ where: { id: UserId }, include: [FreeLance] });
     const freeLanceId = user.freeLances.id;
+    
     service.freelaneId = freeLanceId;
     service.publishedId = postId;
     const validationErrors = await validate(service);
@@ -96,7 +97,27 @@ export class FreeLanceService {
 
   }
 
+async showAcceptedServices(id :number){
 
+  const user = await this.UserModel.findOne({ where: { id: id }, include: [FreeLance] });
+  const freeLanceId = user.freeLances.id;
+
+  const service =await this.ServiceModel.findAll(
+    {where:{freelaneId:freeLanceId,isAccepted:true},
+    include: [
+      {
+        model: Published,
+        include: [
+          {
+            model: User,
+            attributes: { exclude: ['password','updatedAt','createdAt','isBlocked','isReject','isActive'] },
+          },
+        ],
+      },
+    ],
+  });
+  return service;
+}
 
   searchCategory(searchTerm: string): FreelanceCategory {
     const searchTermRegex = new RegExp(searchTerm, 'i');

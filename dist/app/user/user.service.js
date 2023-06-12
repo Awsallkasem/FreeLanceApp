@@ -20,9 +20,13 @@ const Publish_model_1 = require("../../database/models/Publish.model");
 const class_validator_1 = require("class-validator");
 const jwt_1 = require("@nestjs/jwt");
 const service_model_1 = require("../../database/models/service.model");
+const freeLance_model_1 = require("../../database/models/freeLance.model");
+const rating_model_1 = require("../../database/models/rating.model");
 let UserService = class UserService {
-    constructor(userModel, publishModel, serviceModele, jwtService) {
+    constructor(userModel, freeLanceModel, ratingModele, publishModel, serviceModele, jwtService) {
         this.userModel = userModel;
+        this.freeLanceModel = freeLanceModel;
+        this.ratingModele = ratingModele;
         this.publishModel = publishModel;
         this.serviceModele = serviceModele;
         this.jwtService = jwtService;
@@ -65,13 +69,53 @@ let UserService = class UserService {
         }
         return service;
     }
+    async showFreeLanceinfo(id) {
+        const freeLance = await this.freeLanceModel.findOne({
+            where: { id: id }, include: [{
+                    model: user_model_1.User,
+                    attributes: { exclude: ['password', 'updatedAt', 'createdAt', 'isBlocked', 'isReject', 'isActive'] },
+                }]
+        });
+        if (!freeLance) {
+            throw new common_1.NotFoundException('free lance not found');
+        }
+        const rate = await freeLance.calculateRating();
+        return { freeLance: freeLance, rate: rate };
+    }
+    async rateFreeLance(freeLanceId, userId, rate) {
+        const rating = new rating_model_1.Rating({
+            userId: userId,
+            freelaneId: freeLanceId,
+            rating: rate,
+        });
+        const validationErrors = await (0, class_validator_1.validate)(rating);
+        if (validationErrors.length > 0) {
+            const errorMessages = validationErrors.map((error) => Object.values(error.constraints));
+            throw new common_1.BadRequestException(errorMessages);
+        }
+        await rating.save();
+        const freeLance = await this.freeLanceModel.findByPk(freeLanceId);
+        return await freeLance.calculateRating();
+    }
+    async acceptRequest(id) {
+        const service = await this.serviceModele.findByPk(id);
+        if (!service) {
+            throw new common_1.NotFoundException('service not found');
+        }
+        service.date = new Date();
+        service.isAccepted = true;
+        await service.save();
+        return service;
+    }
 };
 UserService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, sequelize_1.InjectModel)(user_model_1.User)),
-    __param(1, (0, sequelize_1.InjectModel)(Publish_model_1.Published)),
-    __param(2, (0, sequelize_1.InjectModel)(service_model_1.Service)),
-    __metadata("design:paramtypes", [Object, Object, Object, jwt_1.JwtService])
+    __param(1, (0, sequelize_1.InjectModel)(freeLance_model_1.FreeLance)),
+    __param(2, (0, sequelize_1.InjectModel)(rating_model_1.Rating)),
+    __param(3, (0, sequelize_1.InjectModel)(Publish_model_1.Published)),
+    __param(4, (0, sequelize_1.InjectModel)(service_model_1.Service)),
+    __metadata("design:paramtypes", [Object, Object, Object, Object, Object, jwt_1.JwtService])
 ], UserService);
 exports.UserService = UserService;
 //# sourceMappingURL=user.service.js.map

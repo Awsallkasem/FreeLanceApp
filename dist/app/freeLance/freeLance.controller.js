@@ -16,6 +16,7 @@ exports.FreeLanceController = void 0;
 const common_1 = require("@nestjs/common");
 const service_model_1 = require("../../database/models/service.model");
 const freeLance_service_1 = require("./freeLance.service");
+const global_exception_filter_1 = require("../../filters/global-exception.filter");
 let FreeLanceController = class FreeLanceController {
     constructor(freeLanceService) {
         this.freeLanceService = freeLanceService;
@@ -36,6 +37,10 @@ let FreeLanceController = class FreeLanceController {
     async checkMyService(req, res) {
         const myService = await this.freeLanceService.checkMyService(req.body.user.id);
         return res.status(200).json({ service: myService });
+    }
+    async showAcceptedServices(req, res) {
+        const services = await this.freeLanceService.showAcceptedServices(req.body.user.id);
+        return res.status(200).json({ services: services });
     }
 };
 __decorate([
@@ -71,7 +76,16 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], FreeLanceController.prototype, "checkMyService", null);
+__decorate([
+    (0, common_1.Get)('showAcceptedServices'),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Response)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], FreeLanceController.prototype, "showAcceptedServices", null);
 FreeLanceController = __decorate([
+    (0, common_1.UseFilters)(global_exception_filter_1.HttpExceptionFilter),
     (0, common_1.Controller)('api/freeLace/'),
     __metadata("design:paramtypes", [freeLance_service_1.FreeLanceService])
 ], FreeLanceController);

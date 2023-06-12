@@ -39,6 +39,10 @@ __decorate([
     __metadata("design:type", Date)
 ], Service.prototype, "date", void 0);
 __decorate([
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.BOOLEAN, defaultValue: false }),
+    __metadata("design:type", Boolean)
+], Service.prototype, "isAccepted", void 0);
+__decorate([
     (0, sequelize_typescript_1.ForeignKey)(() => Publish_model_1.Published),
     (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.INTEGER, allowNull: false }),
     (0, class_validator_1.IsNotEmpty)({ message: 'publishedId is required' }),

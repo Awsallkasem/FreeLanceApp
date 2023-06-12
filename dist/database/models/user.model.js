@@ -14,7 +14,7 @@ const sequelize_typescript_1 = require("sequelize-typescript");
 const class_validator_1 = require("class-validator");
 const Publish_model_1 = require("./Publish.model");
 const freeLance_model_1 = require("./freeLance.model");
-const rank_model_1 = require("./rank.model");
+const rating_model_1 = require("./rating.model");
 var UserRole;
 (function (UserRole) {
     UserRole["ADMIN"] = "admin";
@@ -87,7 +87,7 @@ __decorate([
     __metadata("design:type", freeLance_model_1.FreeLance)
 ], User.prototype, "freeLances", void 0);
 __decorate([
-    (0, sequelize_typescript_1.HasMany)(() => rank_model_1.Rank),
+    (0, sequelize_typescript_1.HasMany)(() => rating_model_1.Rating),
     __metadata("design:type", Array)
 ], User.prototype, "ranks", void 0);
 User = __decorate([

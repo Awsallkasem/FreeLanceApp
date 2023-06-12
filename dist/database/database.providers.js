@@ -4,7 +4,7 @@ exports.databaseProviders = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript");
 const user_model_1 = require("./models/user.model");
 const Publish_model_1 = require("./models/Publish.model");
-const rank_model_1 = require("./models/rank.model");
+const rating_model_1 = require("./models/rating.model");
 const freeLance_model_1 = require("./models/freeLance.model");
 const service_model_1 = require("./models/service.model");
 exports.databaseProviders = [
@@ -20,7 +20,7 @@ exports.databaseProviders = [
                 database: 'free',
                 logging: false
             });
-            sequelize.addModels([user_model_1.User, Publish_model_1.Published, rank_model_1.Rank, service_model_1.Service, freeLance_model_1.FreeLance]);
+            sequelize.addModels([user_model_1.User, Publish_model_1.Published, rating_model_1.Rating, service_model_1.Service, freeLance_model_1.FreeLance]);
             await sequelize.sync();
             return sequelize;
         },

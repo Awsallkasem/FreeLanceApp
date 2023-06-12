@@ -87,6 +87,24 @@ let FreeLanceService = class FreeLanceService {
         }
         return myService;
     }
+    async showAcceptedServices(id) {
+        const user = await this.UserModel.findOne({ where: { id: id }, include: [freeLance_model_1.FreeLance] });
+        const freeLanceId = user.freeLances.id;
+        const service = await this.ServiceModel.findAll({ where: { freelaneId: freeLanceId, isAccepted: true },
+            include: [
+                {
+                    model: Publish_model_1.Published,
+                    include: [
+                        {
+                            model: user_model_1.User,
+                            attributes: { exclude: ['password', 'updatedAt', 'createdAt', 'isBlocked', 'isReject', 'isActive'] },
+                        },
+                    ],
+                },
+            ],
+        });
+        return service;
+    }
     searchCategory(searchTerm) {
         const searchTermRegex = new RegExp(searchTerm, 'i');
         const categoryKeys = Object.keys(Publish_model_1.FreelanceCategory);

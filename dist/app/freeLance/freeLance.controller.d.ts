@@ -7,4 +7,5 @@ export declare class FreeLanceController {
     getAllPostByCategory(category: string, res: any): Promise<any>;
     addService(id: string, service: Service, req: any, res: any): Promise<any>;
     checkMyService(req: any, res: any): Promise<any>;
+    showAcceptedServices(req: any, res: any): Promise<any>;
 }

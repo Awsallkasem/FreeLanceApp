@@ -2,7 +2,7 @@ import { Model, Table, Column, DataType, HasMany, PrimaryKey, AutoIncrement, Has
 import { IsEmail, IsString, Length, IsNotEmpty } from 'class-validator';
 import { Published } from './Publish.model';
 import { FreeLance } from './freeLance.model';
-import { Rank } from './rank.model';
+import { Rating } from './rating.model';
 
 
 
@@ -79,7 +79,7 @@ export class User extends Model<User> implements UserAttributes {
   @HasOne(() => FreeLance)
   freeLances: FreeLance;
 
-  @HasMany(() => Rank)
+  @HasMany(() => Rating)
   ranks: Published[];
 
 

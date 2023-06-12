@@ -16,6 +16,7 @@ exports.UserController = void 0;
 const common_1 = require("@nestjs/common");
 const user_service_1 = require("./user.service");
 const Publish_model_1 = require("../../database/models/Publish.model");
+const global_exception_filter_1 = require("../../filters/global-exception.filter");
 let UserController = class UserController {
     constructor(userservice) {
         this.userservice = userservice;
@@ -25,13 +26,26 @@ let UserController = class UserController {
         const newPublication = await this.userservice.createPost(createPublication.dataValues, req.body.user);
         return res.status(201).json({ message: 'New post uploaded', post: newPublication });
     }
-    async getMyPost(req) {
-        return await this.userservice.getMyPost(req.body.user.id);
+    async getMyPost(req, res) {
+        const myPost = await this.userservice.getMyPost(req.body.user.id);
+        return res.status(200).json({ myPost: myPost });
     }
-    async servicesOnPost(id) {
-        return await this, this.userservice.servicesOnPost(parseInt(id));
+    async servicesOnPost(id, res) {
+        const service = await this.userservice.servicesOnPost(parseInt(id));
+        return res.status(200).json({ service: service });
     }
-    async freeLanceInfo(id) {
+    async freeLanceInfo(id, res) {
+        const freeLanceInfo = await this.userservice.showFreeLanceinfo(parseInt(id));
+        return res.status(200).json({ freeLanceInfo: freeLanceInfo });
+    }
+    async rateFreeLance(id, rate, req, res) {
+        const userId = req.body.user.id;
+        const rateFreeLance = await this.userservice.rateFreeLance(parseInt(id), userId, rate);
+        return res.status(200).json({ rate: rateFreeLance });
+    }
+    async acceptRequest(id, res) {
+        const service = await this.userservice.acceptRequest(parseInt(id));
+        return res.status(200).json({ service: service });
     }
 };
 __decorate([
@@ -46,25 +60,47 @@ __decorate([
 __decorate([
     (0, common_1.Get)('myPosts'),
     __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Response)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "getMyPost", null);
 __decorate([
     (0, common_1.Get)('servicesOnPost/:id'),
     __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Response)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "servicesOnPost", null);
 __decorate([
     (0, common_1.Get)('getFreeLanceInfo/:id'),
     __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Response)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "freeLanceInfo", null);
+__decorate([
+    (0, common_1.Post)('rateFreeLance/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)('rate')),
+    __param(2, (0, common_1.Request)()),
+    __param(3, (0, common_1.Response)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Number, Object, Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "rateFreeLance", null);
+__decorate([
+    (0, common_1.Post)('acceptRequest/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Response)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "acceptRequest", null);
 UserController = __decorate([
+    (0, common_1.UseFilters)(global_exception_filter_1.HttpExceptionFilter),
     (0, common_1.Controller)('api/user'),
     __metadata("design:paramtypes", [user_service_1.UserService])
 ], UserController);

@@ -7,7 +7,7 @@ import { DatabaseModule } from './database/database.module';
 import { UserModule } from './app/user/user.module';
 import { AdminModule } from './app/admin/admin.module';
 import { FreeLance } from './database/models/freeLance.model';
-import { Rank } from './database/models/rank.model';
+import { Rating } from './database/models/rating.model';
 import { Published } from './database/models/Publish.model';
 import { FreeLacneModule } from './app/freeLance/freeLance.module';
 

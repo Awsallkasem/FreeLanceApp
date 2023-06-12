@@ -1,9 +1,10 @@
-import { Controller, Param, Response, Get, Put, Delete, UnauthorizedException, NotFoundException } from '@nestjs/common';
+import { Controller, Param, Response, Get, Put, Delete, UnauthorizedException, NotFoundException, UseFilters } from '@nestjs/common';
 import { Sequelize } from 'sequelize-typescript';
 import { AdminService } from 'src/app/admin/admin.service';
+import { HttpExceptionFilter } from 'src/filters/global-exception.filter';
 
 
-
+@UseFilters(HttpExceptionFilter)
 @Controller('api/admin')
 
 export class AdminContoller {

@@ -23,6 +23,9 @@ export class Service extends Model<Service> {
       })
       date: Date;
 
+      @Column({ type: DataType.BOOLEAN, defaultValue: false })
+      isAccepted: boolean
+
       @ForeignKey(() => Published)
       @Column({type :DataType.INTEGER,allowNull:false})
       @IsNotEmpty({ message: 'publishedId is required' })

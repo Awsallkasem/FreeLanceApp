@@ -14,5 +14,6 @@ export declare class FreeLanceService {
     getAllPostByCategory(category: string): Promise<Published[]>;
     addService(service: Service, UserId: number, postId: number): Promise<Service>;
     checkMyService(id: number): Promise<Service[]>;
+    showAcceptedServices(id: number): Promise<Service[]>;
     searchCategory(searchTerm: string): FreelanceCategory;
 }

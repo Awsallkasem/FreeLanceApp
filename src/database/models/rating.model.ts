@@ -1,20 +1,20 @@
 import { Table, Column, Model, PrimaryKey, AutoIncrement, DataType, ForeignKey, BelongsTo } from 'sequelize-typescript';
-import { ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Published } from './Publish.model';
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, Max, Min } from 'class-validator';
 import { User } from './user.model';
 import { FreeLance } from './freeLance.model';
 
-@Table({ tableName: 'rank' })
-export class Rank extends Model<Rank> {
+@Table({ tableName: 'rating' })
+export class Rating extends Model<Rating> {
     @PrimaryKey
     @AutoIncrement
     @Column(DataType.INTEGER)
     id: number;
 
-    @Column({ type: DataType.INTEGER, allowNull: false })
-    @IsNotEmpty({ message: 'Rank is required' })
-    rank: number
+    @Column({ type: DataType.INTEGER, allowNull: false,validate: { min: 0.5, max: 5 } })
+    @Min(0.01, { message: 'Value must be greater than or equal to 0.01' })
+    @Max(5, { message: 'Value must be less than or equal to 5' })
+    rating: number
+    
 
 
     @ForeignKey(() => User)
@@ -32,5 +32,11 @@ export class Rank extends Model<Rank> {
   
     @BelongsTo(() => FreeLance)
     freelane: FreeLance;
+
+
+
+
+    
     
 }
+

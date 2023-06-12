@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdminContoller = void 0;
 const common_1 = require("@nestjs/common");
 const admin_service_1 = require("./admin.service");
+const global_exception_filter_1 = require("../../filters/global-exception.filter");
 let AdminContoller = class AdminContoller {
     constructor(adminService) {
         this.adminService = adminService;
@@ -71,6 +72,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AdminContoller.prototype, "blockUser", null);
 AdminContoller = __decorate([
+    (0, common_1.UseFilters)(global_exception_filter_1.HttpExceptionFilter),
     (0, common_1.Controller)('api/admin'),
     __metadata("design:paramtypes", [admin_service_1.AdminService])
 ], AdminContoller);

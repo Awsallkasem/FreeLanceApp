@@ -1,7 +1,7 @@
 import { Model, Table, Column, DataType, BeforeCreate, BelongsTo, ForeignKey, AutoIncrement, PrimaryKey, HasMany } from 'sequelize-typescript';
 import { IsNotEmpty } from 'class-validator';
 import { User } from './user.model';
-import { Rank } from './rank.model';
+import { Rating } from './rating.model';
 import { Service } from './service.model';
 // import { File } from './file.model';
 
@@ -34,12 +34,6 @@ export class FreeLance extends Model<FreeLance>  {
   @IsNotEmpty({ message: 'jobTittle is required' })
   jobTittle: JobTittle
 
-@Column({type:DataType.INTEGER,defaultValue:0})
-rank:number
-
-@Column({type:DataType.INTEGER,defaultValue:0})
-number:number
-
   @ForeignKey(() => User)
   @Column({type:DataType.INTEGER,allowNull:false})
   @IsNotEmpty({ message: 'userId is required' })
@@ -49,11 +43,22 @@ number:number
   @BelongsTo(() => User)
   user: User;
 
-  @HasMany(() => Rank)
-  ranks: Rank[];
+  @HasMany(() => Rating)
+  rating: Rating[];
   
   
   @HasMany(() => Service)
   services: Service[];
+
+  async calculateRating(): Promise<number> {
+const freeLanceRate= await Rating.findAll({where:{freelaneId:this.id}})
+  if (!freeLanceRate || freeLanceRate.length === 0) {
+    return 0; 
+  }
+  const totalRating = freeLanceRate.reduce((sum, evaluation) => sum + evaluation.rating, 0);
+  const averageRating = totalRating / freeLanceRate.length;
+  return  parseFloat(averageRating.toFixed(2));
+}
+
 
   }

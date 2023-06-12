@@ -1,6 +1,6 @@
 import { Model } from 'sequelize-typescript';
 import { User } from './user.model';
-import { Rank } from './rank.model';
+import { Rating } from './rating.model';
 import { Service } from './service.model';
 export declare enum JobTittle {
     BackEndDeveloper = "backend-developer",
@@ -13,10 +13,9 @@ export declare class FreeLance extends Model<FreeLance> {
     photoType: string;
     link: string;
     jobTittle: JobTittle;
-    rank: number;
-    number: number;
     userId: number;
     user: User;
-    ranks: Rank[];
+    rating: Rating[];
     services: Service[];
+    calculateRating(): Promise<number>;
 }

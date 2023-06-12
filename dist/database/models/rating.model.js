@@ -9,46 +9,47 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Rank = void 0;
+exports.Rating = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript");
 const class_validator_1 = require("class-validator");
 const user_model_1 = require("./user.model");
 const freeLance_model_1 = require("./freeLance.model");
-let Rank = class Rank extends sequelize_typescript_1.Model {
+let Rating = class Rating extends sequelize_typescript_1.Model {
 };
 __decorate([
     sequelize_typescript_1.PrimaryKey,
     sequelize_typescript_1.AutoIncrement,
     (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.INTEGER),
     __metadata("design:type", Number)
-], Rank.prototype, "id", void 0);
+], Rating.prototype, "id", void 0);
 __decorate([
-    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.INTEGER, allowNull: false }),
-    (0, class_validator_1.IsNotEmpty)({ message: 'Rank is required' }),
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.INTEGER, allowNull: false, validate: { min: 0.5, max: 5 } }),
+    (0, class_validator_1.Min)(0.01, { message: 'Value must be greater than or equal to 0.01' }),
+    (0, class_validator_1.Max)(5, { message: 'Value must be less than or equal to 5' }),
     __metadata("design:type", Number)
-], Rank.prototype, "rank", void 0);
+], Rating.prototype, "rating", void 0);
 __decorate([
     (0, sequelize_typescript_1.ForeignKey)(() => user_model_1.User),
     (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.INTEGER, allowNull: false }),
     (0, class_validator_1.IsNotEmpty)({ message: 'UserId is required' }),
     __metadata("design:type", Number)
-], Rank.prototype, "userId", void 0);
+], Rating.prototype, "userId", void 0);
 __decorate([
     (0, sequelize_typescript_1.BelongsTo)(() => user_model_1.User),
     __metadata("design:type", user_model_1.User)
-], Rank.prototype, "user", void 0);
+], Rating.prototype, "user", void 0);
 __decorate([
     (0, sequelize_typescript_1.ForeignKey)(() => freeLance_model_1.FreeLance),
     (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.INTEGER, allowNull: false }),
     (0, class_validator_1.IsNotEmpty)({ message: 'freelanceId is required' }),
     __metadata("design:type", Number)
-], Rank.prototype, "freelaneId", void 0);
+], Rating.prototype, "freelaneId", void 0);
 __decorate([
     (0, sequelize_typescript_1.BelongsTo)(() => freeLance_model_1.FreeLance),
     __metadata("design:type", freeLance_model_1.FreeLance)
-], Rank.prototype, "freelane", void 0);
-Rank = __decorate([
-    (0, sequelize_typescript_1.Table)({ tableName: 'rank' })
-], Rank);
-exports.Rank = Rank;
-//# sourceMappingURL=rank.model.js.map
+], Rating.prototype, "freelane", void 0);
+Rating = __decorate([
+    (0, sequelize_typescript_1.Table)({ tableName: 'rating' })
+], Rating);
+exports.Rating = Rating;
+//# sourceMappingURL=rating.model.js.map

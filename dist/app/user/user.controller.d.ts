@@ -7,7 +7,9 @@ export declare class UserController {
         message: string;
         post: any;
     }>;
-    getMyPost(req: any): Promise<Published[]>;
-    servicesOnPost(id: string): Promise<import("../../database/models/service.model").Service[]>;
-    freeLanceInfo(id: string): Promise<void>;
+    getMyPost(req: any, res: any): Promise<any>;
+    servicesOnPost(id: string, res: any): Promise<any>;
+    freeLanceInfo(id: string, res: any): Promise<any>;
+    rateFreeLance(id: string, rate: number, req: any, res: any): Promise<any>;
+    acceptRequest(id: string, res: any): Promise<any>;
 }

@@ -1,8 +1,10 @@
-import { Controller, Post, Body,Response,Request, UnauthorizedException, BadRequestException, Param, Get } from '@nestjs/common';
+import { Controller, Post, Body,Response,Request, UnauthorizedException, BadRequestException, Param, Get, UseFilters } from '@nestjs/common';
 import { Service } from 'src/database/models/service.model';
 import { FreeLanceService } from 'src/app/freeLance/freeLance.service';
 import { FreelanceCategory } from 'src/database/models/Publish.model';
+import { HttpExceptionFilter } from 'src/filters/global-exception.filter';
 
+@UseFilters(HttpExceptionFilter)
 @Controller('api/freeLace/')
 
 export class FreeLanceController {
@@ -37,6 +39,11 @@ async checkMyService(@Request() req,@Response() res){
 
   const myService=await this.freeLanceService.checkMyService(req.body.user.id);
 return res.status(200).json({service:myService});
+}
+@Get('showAcceptedServices')
+async showAcceptedServices(@Request() req, @Response() res){
+  const services=await this.freeLanceService.showAcceptedServices(req.body.user.id);
+  return res.status(200).json({services:services});
 }
 
 }

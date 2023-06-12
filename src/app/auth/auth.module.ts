@@ -5,7 +5,7 @@ import { AuthService } from './auth.service';
 import { User } from '../../database/models/user.model';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { FreeLance } from 'src/database/models/freeLance.model';
-import { Rank } from 'src/database/models/rank.model';
+import { Rating } from 'src/database/models/rating.model';
 import { Published } from 'src/database/models/Publish.model';
 import { DatabaseModule } from 'src/database/database.module';
 

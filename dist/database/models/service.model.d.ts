@@ -6,6 +6,7 @@ export declare class Service extends Model<Service> {
     price: number;
     numDays: number;
     date: Date;
+    isAccepted: boolean;
     publishedId: number;
     published: Published;
     freelaneId: number;
