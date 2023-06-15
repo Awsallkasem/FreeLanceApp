@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Type } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import * as paypal from 'paypal-rest-sdk';
+import { FreeLance } from 'src/database/models/freeLance.model';
 import { Payment } from 'src/database/models/payment.model';
 import { Service } from 'src/database/models/service.model';
 
@@ -11,16 +12,21 @@ export class paymentService {
         private readonly PaymentModele: typeof Payment,
         @InjectModel(Service)
         private readonly ServiceModel: typeof Service,
-    ) {
-        paypal.configure({
-            mode: 'sandbox', // or 'live' for production
-            client_id: 'AQVNOFKZjoN7p3xv0hQdlU7y20ZmNNn0XP7N35ZCdp_M9xq9yymLdCDW3UPaJmNtg1nHiJu1gYd6Iv17',
-            client_secret: 'EEk4JuNoccfqae7UZSos_1tjsZ4LZ-kgD84LlRFL5FNXzaNmJEhQJDxP4KcAn23bJx9kEVoNlT8NfNKM',
-        });
-    }
+        @InjectModel(FreeLance)
+        private readonly FreeLanceModele:typeof FreeLance
+    ) {}
 
     async createPayment(id: number, userId: number): Promise<any> {
         const service = await this.ServiceModel.findByPk(id);
+       
+        const freeLance=await this.FreeLanceModele.findByPk(service.freelaneId);
+       
+       
+        paypal.configure({
+            mode: 'sandbox',
+            client_id: freeLance.client_id,
+            client_secret: freeLance.client_secret,
+        });
         const createPaymentJson = {
             intent: 'sale',
             payer: {

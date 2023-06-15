@@ -35,6 +35,15 @@ export class FreeLance extends Model<FreeLance>  {
   @Column({ type: DataType.STRING })
   link: string
 
+
+  @Column({ type: DataType.STRING ,allowNull:false})
+  @IsNotEmpty({ message: 'client secret is required' })
+  client_secret: string
+
+  @Column({ type: DataType.STRING ,allowNull:false})
+  @IsNotEmpty({ message: 'client id is required' })
+  client_id: string
+
   @Column({ type: DataType.ENUM(...Object.values(JobTittle)) ,allowNull:false})
   @IsNotEmpty({ message: 'jobTittle is required' })
   jobTittle: JobTittle

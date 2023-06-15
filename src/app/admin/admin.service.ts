@@ -29,6 +29,11 @@ export class AdminService {
   async acceptRequest(id: number) {
     const user = await this.findUserByIs(id);
 
+    const date = new Date();
+const nextYear = date.getFullYear()+ 1;
+
+date.setFullYear(nextYear);
+    user.Activatedat=date;
     user.isActive = true;
     return await user.save();
   }

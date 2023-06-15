@@ -74,6 +74,9 @@ export class User extends Model<User> implements UserAttributes {
   @Column({ type: DataType.BOOLEAN, defaultValue: false })
   isBlocked: boolean
 
+  @Column({type: DataType.DATEONLY})
+  Activatedat: Date;
+
    @HasMany(() => Published)
   publisheds: Published[];
 
