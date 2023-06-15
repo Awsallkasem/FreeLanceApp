@@ -15,11 +15,16 @@ const class_validator_1 = require("class-validator");
 const user_model_1 = require("./user.model");
 const rating_model_1 = require("./rating.model");
 const service_model_1 = require("./service.model");
+const payment_model_1 = require("./payment.model");
 var JobTittle;
 (function (JobTittle) {
     JobTittle["BackEndDeveloper"] = "backend-developer";
     JobTittle["FrontEndDeveloper"] = "frontend-developer";
     JobTittle["SystemAnalyzer"] = "system_analyzer";
+    JobTittle["Designer"] = "designer";
+    JobTittle["Writer"] = "writer";
+    JobTittle["SocialMediaInf"] = "social_media_inf";
+    JobTittle["ContentCreator"] = "content_creator";
 })(JobTittle = exports.JobTittle || (exports.JobTittle = {}));
 let FreeLance = class FreeLance extends sequelize_typescript_1.Model {
     async calculateRating() {
@@ -69,6 +74,10 @@ __decorate([
     (0, sequelize_typescript_1.HasMany)(() => rating_model_1.Rating),
     __metadata("design:type", Array)
 ], FreeLance.prototype, "rating", void 0);
+__decorate([
+    (0, sequelize_typescript_1.HasMany)(() => payment_model_1.Payment),
+    __metadata("design:type", Array)
+], FreeLance.prototype, "payments", void 0);
 __decorate([
     (0, sequelize_typescript_1.HasMany)(() => service_model_1.Service),
     __metadata("design:type", Array)

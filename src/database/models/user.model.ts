@@ -3,6 +3,7 @@ import { IsEmail, IsString, Length, IsNotEmpty } from 'class-validator';
 import { Published } from './Publish.model';
 import { FreeLance } from './freeLance.model';
 import { Rating } from './rating.model';
+import { Payment } from './payment.model';
 
 
 
@@ -81,6 +82,10 @@ export class User extends Model<User> implements UserAttributes {
 
   @HasMany(() => Rating)
   ranks: Published[];
+
+
+  @HasMany(() => Payment)
+  payments: Payment[];
 
 
 

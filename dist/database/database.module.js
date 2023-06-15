@@ -15,11 +15,12 @@ const Publish_model_1 = require("./models/Publish.model");
 const rating_model_1 = require("./models/rating.model");
 const freeLance_model_1 = require("./models/freeLance.model");
 const service_model_1 = require("./models/service.model");
+const payment_model_1 = require("./models/payment.model");
 let DatabaseModule = class DatabaseModule {
 };
 DatabaseModule = __decorate([
     (0, common_1.Module)({
-        imports: [sequelize_1.SequelizeModule.forFeature([user_model_1.User, Publish_model_1.Published, rating_model_1.Rating, service_model_1.Service, freeLance_model_1.FreeLance])],
+        imports: [sequelize_1.SequelizeModule.forFeature([user_model_1.User, Publish_model_1.Published, rating_model_1.Rating, service_model_1.Service, freeLance_model_1.FreeLance, payment_model_1.Payment])],
         providers: [...database_providers_1.databaseProviders],
         exports: [...database_providers_1.databaseProviders, sequelize_1.SequelizeModule],
     })

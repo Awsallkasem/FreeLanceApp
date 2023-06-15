@@ -3,15 +3,20 @@ import { IsNotEmpty } from 'class-validator';
 import { User } from './user.model';
 import { Rating } from './rating.model';
 import { Service } from './service.model';
+import { Payment } from './payment.model';
 // import { File } from './file.model';
 
 
 
 export enum JobTittle {
-    BackEndDeveloper = 'backend-developer',
-    FrontEndDeveloper = 'frontend-developer',
-    SystemAnalyzer = 'system_analyzer'
-  }
+  BackEndDeveloper = 'backend-developer',
+  FrontEndDeveloper = 'frontend-developer',
+  SystemAnalyzer = 'system_analyzer',
+  Designer = 'designer',
+  Writer = 'writer',
+  SocialMediaInf = 'social_media_inf',
+  ContentCreator = 'content_creator'
+}
   
 
 @Table({ tableName: 'freeLance' })
@@ -46,7 +51,9 @@ export class FreeLance extends Model<FreeLance>  {
   @HasMany(() => Rating)
   rating: Rating[];
   
-  
+  @HasMany(() => Payment)
+  payments: Payment[];
+
   @HasMany(() => Service)
   services: Service[];
 

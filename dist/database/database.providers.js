@@ -7,6 +7,7 @@ const Publish_model_1 = require("./models/Publish.model");
 const rating_model_1 = require("./models/rating.model");
 const freeLance_model_1 = require("./models/freeLance.model");
 const service_model_1 = require("./models/service.model");
+const payment_model_1 = require("./models/payment.model");
 exports.databaseProviders = [
     {
         provide: 'SEQUELIZE',
@@ -20,7 +21,7 @@ exports.databaseProviders = [
                 database: 'free',
                 logging: false
             });
-            sequelize.addModels([user_model_1.User, Publish_model_1.Published, rating_model_1.Rating, service_model_1.Service, freeLance_model_1.FreeLance]);
+            sequelize.addModels([user_model_1.User, Publish_model_1.Published, rating_model_1.Rating, service_model_1.Service, freeLance_model_1.FreeLance, payment_model_1.Payment]);
             await sequelize.sync();
             return sequelize;
         },

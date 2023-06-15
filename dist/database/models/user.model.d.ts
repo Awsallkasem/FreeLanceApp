@@ -1,6 +1,7 @@
 import { Model } from 'sequelize-typescript';
 import { Published } from './Publish.model';
 import { FreeLance } from './freeLance.model';
+import { Payment } from './payment.model';
 export declare enum UserRole {
     ADMIN = "admin",
     USER = "user",
@@ -31,4 +32,5 @@ export declare class User extends Model<User> implements UserAttributes {
     publisheds: Published[];
     freeLances: FreeLance;
     ranks: Published[];
+    payments: Payment[];
 }

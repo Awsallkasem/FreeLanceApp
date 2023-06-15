@@ -14,6 +14,7 @@ const database_module_1 = require("./database/database.module");
 const user_module_1 = require("./app/user/user.module");
 const admin_module_1 = require("./app/admin/admin.module");
 const freeLance_module_1 = require("./app/freeLance/freeLance.module");
+const payaments_module_1 = require("./app/payments/payaments.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -24,7 +25,9 @@ AppModule = __decorate([
             user_module_1.UserModule,
             freeLance_module_1.FreeLacneModule,
             admin_module_1.AdminModule,
+            payaments_module_1.PaymentsMoudle
         ],
+        controllers: []
     })
 ], AppModule);
 exports.AppModule = AppModule;

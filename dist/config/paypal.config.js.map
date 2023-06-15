@@ -1,0 +1,1 @@
+{"version":3,"file":"paypal.config.js","sourceRoot":"","sources":["../../src/config/paypal.config.ts"],"names":[],"mappings":";;AAAA,0CAA0C;AAE1C,MAAM,CAAC,SAAS,CAAC;IACf,IAAI,EAAE,SAAS;IACf,SAAS,EAAE,kFAAkF;IAC7F,aAAa,EAAE,kFAAkF;CAClG,CAAC,CAAC;AAEH,kBAAe,MAAM,CAAC"}

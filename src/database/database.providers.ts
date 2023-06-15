@@ -4,6 +4,7 @@ import { Published } from './models/Publish.model';
 import { Rating } from './models/rating.model';
 import { FreeLance } from './models/freeLance.model';
 import { Service } from './models/service.model';
+import { Payment } from './models/payment.model';
 
 export const databaseProviders = [
   {
@@ -19,7 +20,7 @@ export const databaseProviders = [
         logging:false
       });
 
-      sequelize.addModels([User, Published,Rating,Service,FreeLance]);
+      sequelize.addModels([User, Published,Rating,Service,FreeLance,Payment]);
       await sequelize.sync();
       return sequelize;
     },
