@@ -1,9 +1,13 @@
 import { Model, Table, Column, DataType, HasMany, PrimaryKey, AutoIncrement, HasOne } from 'sequelize-typescript';
 import { IsEmail, IsString, Length, IsNotEmpty } from 'class-validator';
-import { Published } from './Publish.model';
+import { Posts } from './post.model';
 import { FreeLance } from './freeLance.model';
 import { Rating } from './rating.model';
 import { Payment } from './payment.model';
+import { UserRequest } from './userRequest.model';
+import { PayAndRecive } from './payAndRecive.model';
+import { Op } from 'sequelize';
+import { Complaint } from './complaint.model';
 
 
 
@@ -46,12 +50,15 @@ export class User extends Model<User> implements UserAttributes {
   location: string;
 
   @Column({ type: DataType.STRING, allowNull: false })
-  @IsNotEmpty({ message: ' name is required' })
+  @IsNotEmpty({ message: ' Fname is required' })
   Fname: string;
 
   @Column({ type: DataType.STRING, allowNull: false })
-  @IsNotEmpty({ message: ' name is required' })
+  @IsNotEmpty({ message: ' Lname is required' })
   Lname: string;
+
+  // @Column({ type: DataType.STRING })
+  // deviceId: string;
 
 
   @Column({ type: DataType.STRING, validate: { len: [8, 255] } })
@@ -67,6 +74,8 @@ export class User extends Model<User> implements UserAttributes {
   @Column({type:DataType.INTEGER ,defaultValue: 0 })
   walletBalance: number;
 
+  @Column({type:DataType.INTEGER ,defaultValue: 0 })
+ point: number;
 
 
   @Column({ type: DataType.BOOLEAN, defaultValue: false })
@@ -81,21 +90,57 @@ export class User extends Model<User> implements UserAttributes {
   @Column({type: DataType.DATEONLY})
   Activatedat: Date;
 
-   @HasMany(() => Published)
-  publisheds: Published[];
+   @HasMany(() => Posts,{ onDelete: 'cascade', hooks:true })
+  publisheds: Posts[];
 
-  @HasOne(() => FreeLance)
+  @HasOne(() => FreeLance,{ onDelete: 'cascade', hooks:true })
   freeLances: FreeLance;
 
-  @HasMany(() => Rating)
-  ranks: Published[];
+  @HasMany(() => Rating,{ onDelete: 'cascade', hooks:true })
+  ranks: Posts[];
 
 
-  @HasMany(() => Payment)
+  @HasMany(() => Payment,{ onDelete: 'cascade', hooks:true })
   payments: Payment[];
 
+  @HasMany(()=>PayAndRecive,{ onDelete: 'cascade', hooks:true })
+  payAndRecive:PayAndRecive;
+
+  @HasMany(()=>Complaint,{ onDelete: 'cascade', hooks:true })
+  complaint:Complaint;
+
+  static async statisticalsNumUser(year: number): Promise<any[]> {
+    return await this.findAll({
+        attributes: [
+            [this.sequelize.fn('YEARWEEK', this.sequelize.col('createdAt'), 0), 'week'],
+            [this.sequelize.col('role'), 'role'],
+            [this.sequelize.fn('COUNT', this.sequelize.col('role')), 'roleCount']
+        ],
+        group: [this.sequelize.fn('YEARWEEK', this.sequelize.col('createdAt'), 0), 'role'],
+        where: {[Op.and]: [
+          this.sequelize.where(this.sequelize.fn('YEAR', this.sequelize.col('createdAt')), year),
+      {role:UserRole.USER}
+        ]},
+        raw: true,
+    });
+}
 
 
+static async statisticalsNumFreeLance(year: number): Promise<any[]> {
+  return await this.findAll({
+      attributes: [
+          [this.sequelize.fn('YEARWEEK', this.sequelize.col('createdAt'), 0), 'week'],
+          [this.sequelize.col('role'), 'role'],
+          [this.sequelize.fn('COUNT', this.sequelize.col('role')), 'roleCount']
+      ],
+      group: [this.sequelize.fn('YEARWEEK', this.sequelize.col('createdAt'), 0), 'role'],
+      where: {[Op.and]: [
+        this.sequelize.where(this.sequelize.fn('YEAR', this.sequelize.col('createdAt')), year),
+    {role:UserRole.FreeLnce}
+      ]},
+      raw: true,
+  });
+}
 }
 
 

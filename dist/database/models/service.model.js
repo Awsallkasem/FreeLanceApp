@@ -11,9 +11,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Service = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript");
-const Publish_model_1 = require("./Publish.model");
+const post_model_1 = require("./post.model");
 const class_validator_1 = require("class-validator");
 const freeLance_model_1 = require("./freeLance.model");
+const complaint_model_1 = require("./complaint.model");
 let Service = class Service extends sequelize_typescript_1.Model {
 };
 __decorate([
@@ -37,20 +38,30 @@ __decorate([
         type: sequelize_typescript_1.DataType.DATEONLY,
     }),
     __metadata("design:type", Date)
-], Service.prototype, "date", void 0);
+], Service.prototype, "Sdate", void 0);
+__decorate([
+    (0, sequelize_typescript_1.Column)({
+        type: sequelize_typescript_1.DataType.DATEONLY,
+    }),
+    __metadata("design:type", Date)
+], Service.prototype, "Edate", void 0);
+__decorate([
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.STRING }),
+    __metadata("design:type", String)
+], Service.prototype, "filePath", void 0);
 __decorate([
     (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.BOOLEAN, defaultValue: false }),
     __metadata("design:type", Boolean)
 ], Service.prototype, "isAccepted", void 0);
 __decorate([
-    (0, sequelize_typescript_1.ForeignKey)(() => Publish_model_1.Published),
+    (0, sequelize_typescript_1.ForeignKey)(() => post_model_1.Posts),
     (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.INTEGER, allowNull: false }),
     (0, class_validator_1.IsNotEmpty)({ message: 'publishedId is required' }),
     __metadata("design:type", Number)
 ], Service.prototype, "publishedId", void 0);
 __decorate([
-    (0, sequelize_typescript_1.BelongsTo)(() => Publish_model_1.Published),
-    __metadata("design:type", Publish_model_1.Published)
+    (0, sequelize_typescript_1.BelongsTo)(() => post_model_1.Posts),
+    __metadata("design:type", post_model_1.Posts)
 ], Service.prototype, "published", void 0);
 __decorate([
     (0, sequelize_typescript_1.ForeignKey)(() => freeLance_model_1.FreeLance),
@@ -62,6 +73,10 @@ __decorate([
     (0, sequelize_typescript_1.BelongsTo)(() => freeLance_model_1.FreeLance),
     __metadata("design:type", freeLance_model_1.FreeLance)
 ], Service.prototype, "freelane", void 0);
+__decorate([
+    (0, sequelize_typescript_1.HasMany)(() => complaint_model_1.Complaint, { onDelete: 'cascade', hooks: true }),
+    __metadata("design:type", complaint_model_1.Complaint)
+], Service.prototype, "complaint", void 0);
 Service = __decorate([
     (0, sequelize_typescript_1.Table)({ tableName: 'service' })
 ], Service);

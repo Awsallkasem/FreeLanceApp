@@ -15,6 +15,10 @@ const database_module_1 = require("../../database/database.module");
 const jwt_1 = require("@nestjs/jwt");
 const auth_service_1 = require("../auth/auth.service");
 let PayPalModule = class PayPalModule {
+    configure(consumer) {
+        consumer.apply(decodeToken_middleware_1.decodeTokenMiddleware)
+            .forRoutes('api/payments/*');
+    }
 };
 PayPalModule = __decorate([
     (0, common_1.Module)({

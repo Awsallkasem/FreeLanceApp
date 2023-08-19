@@ -16,6 +16,8 @@ const user_model_1 = require("./user.model");
 const rating_model_1 = require("./rating.model");
 const service_model_1 = require("./service.model");
 const payout_model_1 = require("./payout.model");
+const postWithPoint_model_1 = require("./postWithPoint.model");
+const payAndRecive_model_1 = require("./payAndRecive.model");
 var JobTittle;
 (function (JobTittle) {
     JobTittle["BackEndDeveloper"] = "backend-developer";
@@ -50,10 +52,6 @@ __decorate([
 __decorate([
     (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.STRING }),
     __metadata("design:type", String)
-], FreeLance.prototype, "photoType", void 0);
-__decorate([
-    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.STRING }),
-    __metadata("design:type", String)
 ], FreeLance.prototype, "link", void 0);
 __decorate([
     (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.ENUM(...Object.values(JobTittle)), allowNull: false }),
@@ -71,17 +69,25 @@ __decorate([
     __metadata("design:type", user_model_1.User)
 ], FreeLance.prototype, "user", void 0);
 __decorate([
-    (0, sequelize_typescript_1.HasMany)(() => rating_model_1.Rating),
+    (0, sequelize_typescript_1.HasMany)(() => rating_model_1.Rating, { onDelete: 'cascade', hooks: true }),
     __metadata("design:type", Array)
 ], FreeLance.prototype, "rating", void 0);
 __decorate([
-    (0, sequelize_typescript_1.HasMany)(() => payout_model_1.Payout),
+    (0, sequelize_typescript_1.HasMany)(() => payout_model_1.Payout, { onDelete: 'cascade', hooks: true }),
     __metadata("design:type", Array)
 ], FreeLance.prototype, "payouts", void 0);
 __decorate([
-    (0, sequelize_typescript_1.HasMany)(() => service_model_1.Service),
+    (0, sequelize_typescript_1.HasMany)(() => service_model_1.Service, { onDelete: 'cascade', hooks: true }),
     __metadata("design:type", Array)
 ], FreeLance.prototype, "services", void 0);
+__decorate([
+    (0, sequelize_typescript_1.HasMany)(() => postWithPoint_model_1.postWithPoint, { onDelete: 'cascade', hooks: true }),
+    __metadata("design:type", Array)
+], FreeLance.prototype, "postPoint", void 0);
+__decorate([
+    (0, sequelize_typescript_1.HasMany)(() => payAndRecive_model_1.PayAndRecive, { onDelete: 'cascade', hooks: true }),
+    __metadata("design:type", payAndRecive_model_1.PayAndRecive)
+], FreeLance.prototype, "payAndRecive", void 0);
 FreeLance = __decorate([
     (0, sequelize_typescript_1.Table)({ tableName: 'freeLance' })
 ], FreeLance);

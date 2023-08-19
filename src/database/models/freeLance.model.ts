@@ -5,7 +5,8 @@ import { Rating } from './rating.model';
 import { Service } from './service.model';
 import { Payment } from './payment.model';
 import { Payout } from './payout.model';
-// import { File } from './file.model';
+import { postWithPoint } from './postWithPoint.model';
+import { PayAndRecive } from './payAndRecive.model';
 
 
 
@@ -30,8 +31,7 @@ export class FreeLance extends Model<FreeLance>  {
   @Column({ type: DataType.STRING })
   photoName: string;
 
-  @Column({ type: DataType.STRING })
-  photoType: string;
+ 
  
   @Column({ type: DataType.STRING })
   link: string
@@ -51,14 +51,22 @@ export class FreeLance extends Model<FreeLance>  {
   @BelongsTo(() => User)
   user: User;
 
-  @HasMany(() => Rating)
+  @HasMany(() => Rating,{ onDelete: 'cascade', hooks:true })
   rating: Rating[];
   
-  @HasMany(() => Payout)
+  @HasMany(() => Payout,{ onDelete: 'cascade', hooks:true })
   payouts: Payout[];
 
-  @HasMany(() => Service)
+  @HasMany(() => Service,{ onDelete: 'cascade', hooks:true })
   services: Service[];
+
+  @HasMany(() => postWithPoint,{ onDelete: 'cascade', hooks:true })
+  postPoint: postWithPoint[];
+
+  
+  @HasMany(()=>PayAndRecive,{ onDelete: 'cascade', hooks:true })
+  payAndRecive:PayAndRecive;
+
 
   async calculateRating(): Promise<number> {
 const freeLanceRate= await Rating.findAll({where:{freelaneId:this.id}})

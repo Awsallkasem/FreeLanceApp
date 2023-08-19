@@ -7,24 +7,34 @@ import { decodeTokenMiddleware } from 'src/middlewares/authrization/decodeToken.
 import { AdminMiddleware } from 'src/middlewares/authrization/admin.middleware';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthService } from 'src/app/auth/auth.service';
-import { Published } from 'src/database/models/Publish.model';
+import { Posts } from 'src/database/models/post.model';
 import { FreeLance } from 'src/database/models/freeLance.model';
 import { DatabaseModule } from 'src/database/database.module';
 import { FreeLanceController } from 'src/app/freeLance/freeLance.controller';
 import { FreeLanceService } from 'src/app/freeLance/freeLance.service';
 import { FreeLanceMiddleware } from 'src/middlewares/authrization/freelance.middleware';
+import { WalletModule } from '../wallet/wallet.module';
+import { WalletService } from '../wallet/wallet.service';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
+import { OneSignalService } from '../oneSignal.service';
 
 @Module({
   imports: [
     DatabaseModule,
-
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+    }),
     JwtModule.register({
       secret: 'yasdmfy', // Replace with your own secret key
       signOptions: { expiresIn: '1h' }, // Configure token expiration
     }),
+    WalletModule
+
   ],
   controllers: [FreeLanceController],
-  providers: [AuthService, FreeLanceService, decodeTokenMiddleware, FreeLanceMiddleware],
+  providers: [AuthService, WalletService, FreeLanceService, decodeTokenMiddleware, FreeLanceMiddleware,OneSignalService],
+
 })
 export class FreeLacneModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

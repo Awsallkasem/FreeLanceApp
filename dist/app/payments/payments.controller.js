@@ -21,28 +21,31 @@ let PayPalController = class PayPalController {
     constructor(payPalService) {
         this.payPalService = payPalService;
     }
-    async receiveMoney(amount, res, req) {
-        if (!amount) {
-            throw new common_1.BadRequestException('amount is required');
+    async receiveMoney(packgId, res, req) {
+        if (!packgId) {
+            throw new common_1.BadRequestException('packgId is required');
         }
-        res.redirect(await this.payPalService.receiveMoney(parseInt(amount), 1));
+        res.redirect(await this.payPalService.receiveMoney(parseInt(packgId), req.body.user.id));
         return { message: 'Payment received successfully.' };
     }
-    async sendMoney(amount, res, req) {
-        if (!amount) {
+    async sendMoney(amount, point, res, req) {
+        if (!amount && !point) {
             throw new common_1.BadRequestException('amount is required');
         }
-        const message = await this.payPalService.sendMoney(parseInt(amount), 3);
+        const message = await this.payPalService.sendMoney(amount, point, req.body.user.id);
         return res.status(200).send({ message: message });
     }
     async success(res, req) {
         const payment = await this.payPalService.success(req);
         return res.status(201).json({ message: 'done' });
     }
+    async showPackgs() {
+        return this.payPalService.showPackgs();
+    }
 };
 __decorate([
-    (0, common_1.Get)('receive-money/:amount'),
-    __param(0, (0, common_1.Param)('amount')),
+    (0, common_1.Get)('receive-money/:packgId'),
+    __param(0, (0, common_1.Param)('packgId')),
     __param(1, (0, common_1.Response)()),
     __param(2, (0, common_1.Request)()),
     __metadata("design:type", Function),
@@ -50,12 +53,13 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], PayPalController.prototype, "receiveMoney", null);
 __decorate([
-    (0, common_1.Get)('send-money/:amount'),
-    __param(0, (0, common_1.Param)('amount')),
-    __param(1, (0, common_1.Response)()),
-    __param(2, (0, common_1.Request)()),
+    (0, common_2.Post)('send-money'),
+    __param(0, (0, common_2.Body)('amount')),
+    __param(1, (0, common_2.Body)('point')),
+    __param(2, (0, common_1.Response)()),
+    __param(3, (0, common_1.Request)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object, Object]),
+    __metadata("design:paramtypes", [Number, Number, Object, Object]),
     __metadata("design:returntype", Promise)
 ], PayPalController.prototype, "sendMoney", null);
 __decorate([
@@ -66,6 +70,12 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], PayPalController.prototype, "success", null);
+__decorate([
+    (0, common_1.Get)('showPackgs'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], PayPalController.prototype, "showPackgs", null);
 PayPalController = __decorate([
     (0, common_1.UseFilters)(global_exception_filter_1.HttpExceptionFilter),
     (0, common_2.Controller)('api/payments/'),

@@ -15,6 +15,7 @@ const admin_middleware_1 = require("../../middlewares/authrization/admin.middlew
 const jwt_1 = require("@nestjs/jwt");
 const auth_service_1 = require("../auth/auth.service");
 const database_module_1 = require("../../database/database.module");
+const oneSignal_service_1 = require("../oneSignal.service");
 let AdminModule = class AdminModule {
     configure(consumer) {
         consumer.apply(decodeToken_middleware_1.decodeTokenMiddleware)
@@ -33,7 +34,7 @@ AdminModule = __decorate([
             }),
         ],
         controllers: [admin_controller_1.AdminContoller],
-        providers: [auth_service_1.AuthService, admin_service_1.AdminService, decodeToken_middleware_1.decodeTokenMiddleware, admin_middleware_1.AdminMiddleware],
+        providers: [auth_service_1.AuthService, admin_service_1.AdminService, decodeToken_middleware_1.decodeTokenMiddleware, admin_middleware_1.AdminMiddleware, oneSignal_service_1.OneSignalService],
     })
 ], AdminModule);
 exports.AdminModule = AdminModule;

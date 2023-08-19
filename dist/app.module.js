@@ -15,18 +15,26 @@ const admin_module_1 = require("./app/admin/admin.module");
 const freeLance_module_1 = require("./app/freeLance/freeLance.module");
 const payaments_module_1 = require("./app/payments/payaments.module");
 const sequelize_config_1 = require("./config/sequelize.config");
+const serve_static_1 = require("@nestjs/serve-static");
+const path_1 = require("path");
+const category_seed_1 = require("./database/seeds/categoryseed/category.seed");
+const oneSignal_service_1 = require("./app/oneSignal.service");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
             sequelize_1.SequelizeModule.forRoot(sequelize_config_1.sequelizeConfig),
+            serve_static_1.ServeStaticModule.forRoot({
+                rootPath: (0, path_1.join)(__dirname, '..', 'public'),
+            }),
             database_module_1.DatabaseModule,
             user_module_1.UserModule,
             freeLance_module_1.FreeLacneModule,
             admin_module_1.AdminModule,
-            payaments_module_1.PayPalModule
+            payaments_module_1.PayPalModule,
         ],
+        providers: [category_seed_1.CategorySeed, oneSignal_service_1.OneSignalService],
         controllers: []
     })
 ], AppModule);

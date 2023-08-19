@@ -6,5 +6,10 @@ export declare class AdminContoller {
     acceptRequest(id: string, res: any): Promise<any>;
     rejectRequest(id: string, res: any): Promise<any>;
     blockUser(id: string, res: any): Promise<any>;
-    updateLicnse(amount: number, res: any): Promise<any>;
+    statisticalsCategoryWeekly(res: any): Promise<any>;
+    statisticalsCategory(res: any): Promise<any>;
+    statisticalsNumUser(res: any): Promise<any>;
+    statisticalsNumFreeLance(res: any): Promise<any>;
+    showComplaint(): Promise<import("../../database/models/complaint.model").Complaint[]>;
+    statisticalsComplaint(): Promise<any[]>;
 }

@@ -15,6 +15,11 @@ const database_module_1 = require("../../database/database.module");
 const freeLance_controller_1 = require("./freeLance.controller");
 const freeLance_service_1 = require("./freeLance.service");
 const freelance_middleware_1 = require("../../middlewares/authrization/freelance.middleware");
+const wallet_module_1 = require("../wallet/wallet.module");
+const wallet_service_1 = require("../wallet/wallet.service");
+const serve_static_1 = require("@nestjs/serve-static");
+const path_1 = require("path");
+const oneSignal_service_1 = require("../oneSignal.service");
 let FreeLacneModule = class FreeLacneModule {
     configure(consumer) {
         consumer.apply(decodeToken_middleware_1.decodeTokenMiddleware)
@@ -27,13 +32,17 @@ FreeLacneModule = __decorate([
     (0, common_1.Module)({
         imports: [
             database_module_1.DatabaseModule,
+            serve_static_1.ServeStaticModule.forRoot({
+                rootPath: (0, path_1.join)(__dirname, '..', 'public'),
+            }),
             jwt_1.JwtModule.register({
                 secret: 'yasdmfy',
                 signOptions: { expiresIn: '1h' },
             }),
+            wallet_module_1.WalletModule
         ],
         controllers: [freeLance_controller_1.FreeLanceController],
-        providers: [auth_service_1.AuthService, freeLance_service_1.FreeLanceService, decodeToken_middleware_1.decodeTokenMiddleware, freelance_middleware_1.FreeLanceMiddleware],
+        providers: [auth_service_1.AuthService, wallet_service_1.WalletService, freeLance_service_1.FreeLanceService, decodeToken_middleware_1.decodeTokenMiddleware, freelance_middleware_1.FreeLanceMiddleware, oneSignal_service_1.OneSignalService],
     })
 ], FreeLacneModule);
 exports.FreeLacneModule = FreeLacneModule;

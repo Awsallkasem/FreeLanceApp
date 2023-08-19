@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var paymentService_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.paymentService = void 0;
 const common_1 = require("@nestjs/common");
@@ -21,6 +20,7 @@ const user_model_1 = require("../../database/models/user.model");
 const axios_1 = require("axios");
 const payout_model_1 = require("../../database/models/payout.model");
 const freeLance_model_1 = require("../../database/models/freeLance.model");
+const packgs_model_1 = require("../../database/models/packgs.model");
 class DataForBayment {
     static setAmount(amount) {
         this.amount = amount;
@@ -29,15 +29,18 @@ class DataForBayment {
         this.userId = userId;
     }
 }
-let paymentService = paymentService_1 = class paymentService {
-    constructor(payoutModele, UserModel, FreeLanceModel) {
+let paymentService = class paymentService {
+    constructor(payoutModele, UserModel, FreeLanceModel, packgsModele) {
         this.payoutModele = payoutModele;
         this.UserModel = UserModel;
         this.FreeLanceModel = FreeLanceModel;
-        this.logger = new common_1.Logger(paymentService_1.name);
+        this.packgsModele = packgsModele;
     }
-    async receiveMoney(amount, userId) {
+    async receiveMoney(packgId, userId) {
         var _a;
+        const amount = (await this.packgsModele.findByPk(packgId)).amout;
+        DataForBayment.amount = amount;
+        DataForBayment.userId = userId;
         const authHeader = Buffer.from('AQ0lkpBSIK9roOaQe3hx2RBpwp4B4J0Pg9hf8qNma4ldJ6Ed1DbYU7i_YnvW0DaS0XlB0kiRUkYKegbA:EHxX5I1KHvgn88vahZNJstKK-6Nh-z7Kb0865JohnAb-nFciadAR2fOfgKob9ccv1qJYZJqE8i3F7LA0').toString('base64');
         const config = {
             headers: {
@@ -79,20 +82,29 @@ let paymentService = paymentService_1 = class paymentService {
             throw new Error('Failed to initiate PayPal payment.');
         }
     }
-    async sendMoney(amount, userId) {
+    async sendMoney(amount, point, userId) {
         var _a;
         const user = await this.UserModel.findOne({ where: { id: userId } });
         const freeLance = await this.FreeLanceModel.findOne({ where: { userId: user.id } });
         if (amount > user.walletBalance) {
             throw new common_1.BadRequestException(`your wallet balance is ${user.walletBalance} less than ${amount}`);
         }
-        if (amount < 5) {
+        if (point > user.walletBalance) {
+            throw new common_1.BadRequestException(`your poit balance is ${user.point} less than ${point}`);
+        }
+        if (amount < 5 && point < 5) {
             throw new common_1.BadRequestException('amount should be 5 or greater than');
         }
         if (!freeLance) {
-            throw new common_1.NotFoundException("fnot fouund");
+            throw new common_1.NotFoundException("freeLance not fouund");
         }
-        const acttuallMoney = amount - Math.ceil(amount * 0.05);
+        let acttuallMoney = 0;
+        if (amount >= 5) {
+            acttuallMoney += amount - Math.ceil(amount * 0.05);
+        }
+        if (point >= 5) {
+            acttuallMoney += point - Math.ceil(point * 0.5);
+        }
         const authHeader = Buffer.from('AQ0lkpBSIK9roOaQe3hx2RBpwp4B4J0Pg9hf8qNma4ldJ6Ed1DbYU7i_YnvW0DaS0XlB0kiRUkYKegbA:EHxX5I1KHvgn88vahZNJstKK-6Nh-z7Kb0865JohnAb-nFciadAR2fOfgKob9ccv1qJYZJqE8i3F7LA0').toString('base64');
         const config = {
             headers: {
@@ -126,10 +138,11 @@ let paymentService = paymentService_1 = class paymentService {
                 payout.freeLanceId = freeLance.id;
                 payout.date = new Date();
                 user.walletBalance -= amount;
+                user.point -= point;
                 await user.save();
                 await this.payoutModele.create(payout.dataValues);
+                return `you recive of ${acttuallMoney} USD from${'my app'} completed successfully. Payout ID: ${response.data.batch_header.payout_batch_id}`;
             }
-            return `you recive of ${acttuallMoney} USD from${'my app'} completed successfully. Payout ID: ${response.data.batch_header.payout_batch_id}`;
         }
         catch (error) {
             console.error('PayPal payout error:', ((_a = error.response) === null || _a === void 0 ? void 0 : _a.data) || error.message);
@@ -150,13 +163,17 @@ let paymentService = paymentService_1 = class paymentService {
         await payment.save();
         return payment;
     }
+    async showPackgs() {
+        return await this.packgsModele.findAll();
+    }
 };
-paymentService = paymentService_1 = __decorate([
+paymentService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, sequelize_1.InjectModel)(payout_model_1.Payout)),
     __param(1, (0, sequelize_1.InjectModel)(user_model_1.User)),
     __param(2, (0, sequelize_1.InjectModel)(freeLance_model_1.FreeLance)),
-    __metadata("design:paramtypes", [Object, Object, Object])
+    __param(3, (0, sequelize_1.InjectModel)(packgs_model_1.Packgs)),
+    __metadata("design:paramtypes", [Object, Object, Object, Object])
 ], paymentService);
 exports.paymentService = paymentService;
 //# sourceMappingURL=payments.service.js.map

@@ -7,9 +7,10 @@ import { decodeTokenMiddleware } from 'src/middlewares/authrization/decodeToken.
 import { AdminMiddleware } from 'src/middlewares/authrization/admin.middleware';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthService } from 'src/app/auth/auth.service';
-import { Published } from 'src/database/models/Publish.model';
+import { Posts } from 'src/database/models/post.model';
 import { FreeLance } from 'src/database/models/freeLance.model';
 import { DatabaseModule } from 'src/database/database.module';
+import { OneSignalService } from '../oneSignal.service';
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { DatabaseModule } from 'src/database/database.module';
     }),
   ],
   controllers: [AdminContoller],
-  providers: [AuthService, AdminService, decodeTokenMiddleware, AdminMiddleware],
+  providers: [AuthService, AdminService, decodeTokenMiddleware, AdminMiddleware,OneSignalService],
+
 })
 export class AdminModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

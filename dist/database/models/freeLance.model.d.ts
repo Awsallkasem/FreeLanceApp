@@ -3,6 +3,8 @@ import { User } from './user.model';
 import { Rating } from './rating.model';
 import { Service } from './service.model';
 import { Payout } from './payout.model';
+import { postWithPoint } from './postWithPoint.model';
+import { PayAndRecive } from './payAndRecive.model';
 export declare enum JobTittle {
     BackEndDeveloper = "backend-developer",
     FrontEndDeveloper = "frontend-developer",
@@ -15,7 +17,6 @@ export declare enum JobTittle {
 export declare class FreeLance extends Model<FreeLance> {
     id: number;
     photoName: string;
-    photoType: string;
     link: string;
     jobTittle: JobTittle;
     userId: number;
@@ -23,5 +24,7 @@ export declare class FreeLance extends Model<FreeLance> {
     rating: Rating[];
     payouts: Payout[];
     services: Service[];
+    postPoint: postWithPoint[];
+    payAndRecive: PayAndRecive;
     calculateRating(): Promise<number>;
 }

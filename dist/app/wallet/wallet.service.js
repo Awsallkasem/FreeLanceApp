@@ -27,7 +27,20 @@ let WalletService = class WalletService {
     async deposit(userId, amount) {
         const user = await this.userModel.findOne({ where: { id: userId } });
         user.walletBalance += amount;
-        await this.userModel.create(user);
+        await user.save();
+        return user.walletBalance;
+    }
+    async depositByPoint(userId, amount) {
+        const user = await this.userModel.findOne({ where: { id: userId } });
+        user.point += amount;
+        await user.save();
+        return user.point;
+    }
+    async disposit(userId, amount) {
+        const user = await this.userModel.findOne({ where: { id: userId } });
+        user.walletBalance -= amount;
+        user.point += amount;
+        await user.save();
         return user.walletBalance;
     }
     async transfer(fromUserId, toUserId, amount) {
@@ -41,7 +54,16 @@ let WalletService = class WalletService {
         }
         fromUser.walletBalance -= amount;
         toUser.walletBalance += amount;
-        await this.userModel.create([fromUser, toUser]);
+        try {
+            await this.userModel.sequelize.transaction(async (t) => {
+                const transactionHost = { transaction: t };
+                fromUser.save(transactionHost);
+                toUser.save(transactionHost);
+            });
+        }
+        catch (e) {
+            throw new Error(e);
+        }
         return { fromWalletBalance: fromUser.walletBalance, toWalletBalance: toUser.walletBalance };
     }
 };

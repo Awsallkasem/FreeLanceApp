@@ -38,10 +38,39 @@ export class AdminContoller {
       const blocked = await this.adminService.blockUser(parseInt(id));
       return res.status(200).json({ data: blocked });
   }
-  @Post('updateLicnse')
-  async updateLicnse(@Body('amount') amount:number,@Response() res){
-const updated =await this.adminService.updateLicnces(amount);
-return res.status(200).json({message:'updated'})
+  @Get('statisticalsCategoryWeekly')
+  async statisticalsCategoryWeekly(@Response() res){
+    const statisticals=await this.adminService.statisticalsCategoryWeekly();
+    return res.status(200).json({data:statisticals});
+  }
+
+  @Get('statisticalsCategory')
+  async statisticalsCategory(@Response() res){
+    const statisticals=await this.adminService.statisticalsCategory();
+    return res.status(200).json({data:statisticals});
+  }
+
+  @Get('statisticalsNumUser')
+  async statisticalsNumUser(@Response() res){
+    const statisticals=await this.adminService.statisticalsNumUser();
+    return res.status(200).json({data:statisticals});
+  }
+
+  @Get('statisticalsNumFreeLance')
+  async statisticalsNumFreeLance(@Response() res){
+    const statisticals=await this.adminService.statisticalsNumFreeLance();
+    return res.status(200).json({data:statisticals});
+  }
+
+  @Get('showComplaint')
+  async showComplaint(){
+return await this.adminService.showComplaint();
+
+  }
+
+  @Get('statisticalsComplaint')
+  async statisticalsComplaint(){
+return await this.adminService.statisticalsComplaint();
 
   }
 }

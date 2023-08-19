@@ -2,9 +2,10 @@ import { paymentService } from './payments.service';
 export declare class PayPalController {
     private readonly payPalService;
     constructor(payPalService: paymentService);
-    receiveMoney(amount: any, res: any, req: any): Promise<{
+    receiveMoney(packgId: any, res: any, req: any): Promise<{
         message: string;
     }>;
-    sendMoney(amount: any, res: any, req: any): Promise<any>;
+    sendMoney(amount: number, point: number, res: any, req: any): Promise<any>;
     success(res: any, req: any): Promise<any>;
+    showPackgs(): Promise<import("../../database/models/packgs.model").Packgs[]>;
 }

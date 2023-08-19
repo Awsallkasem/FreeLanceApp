@@ -1,5 +1,5 @@
 
-import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { Get, MiddlewareConsumer, Module } from '@nestjs/common';
 import { PayPalController } from './payments.controller';
 import { paymentService } from './payments.service';
 import { decodeTokenMiddleware } from 'src/middlewares/authrization/decodeToken.middleware';
@@ -8,7 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthService } from '../auth/auth.service';
 
 @Module({
-  imports: [ 
+  imports: [
     DatabaseModule,
 
     JwtModule.register({
@@ -17,13 +17,13 @@ import { AuthService } from '../auth/auth.service';
     }),
   ],
   controllers: [PayPalController],
-  providers: [paymentService,AuthService,decodeTokenMiddleware],
+  providers: [paymentService, AuthService, decodeTokenMiddleware],
 })
 export class PayPalModule {
-  // configure(consumer: MiddlewareConsumer) {
-  //   consumer.apply(decodeTokenMiddleware)
-  //     .forRoutes('api/payments/*')
-// }
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(decodeTokenMiddleware)
+      .forRoutes('api/payments/*')
+  }
+
 
 }
-  

@@ -19,6 +19,9 @@ const jwt_1 = require("@nestjs/jwt");
 const auth_service_1 = require("../auth/auth.service");
 const database_module_1 = require("../../database/database.module");
 const freeLance_module_1 = require("../freeLance/freeLance.module");
+const wallet_module_1 = require("../wallet/wallet.module");
+const wallet_service_1 = require("../wallet/wallet.service");
+const oneSignal_service_1 = require("../oneSignal.service");
 exports.UserProviders = [
     {
         provide: 'USERS_REPOSITORY',
@@ -43,10 +46,11 @@ UserModule = __decorate([
             }),
             auth_module_1.AuthModule,
             admin_module_1.AdminModule,
-            freeLance_module_1.FreeLacneModule
+            freeLance_module_1.FreeLacneModule,
+            wallet_module_1.WalletModule
         ],
         controllers: [user_controller_1.UserController],
-        providers: [user_service_1.UserService, auth_service_1.AuthService, ...exports.UserProviders]
+        providers: [user_service_1.UserService, auth_service_1.AuthService, wallet_service_1.WalletService, ...exports.UserProviders, oneSignal_service_1.OneSignalService]
     })
 ], UserModule);
 exports.UserModule = UserModule;

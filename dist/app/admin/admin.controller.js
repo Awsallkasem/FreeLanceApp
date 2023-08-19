@@ -39,9 +39,27 @@ let AdminContoller = class AdminContoller {
         const blocked = await this.adminService.blockUser(parseInt(id));
         return res.status(200).json({ data: blocked });
     }
-    async updateLicnse(amount, res) {
-        const updated = await this.adminService.updateLicnces(amount);
-        return res.status(200).json({ message: 'updated' });
+    async statisticalsCategoryWeekly(res) {
+        const statisticals = await this.adminService.statisticalsCategoryWeekly();
+        return res.status(200).json({ data: statisticals });
+    }
+    async statisticalsCategory(res) {
+        const statisticals = await this.adminService.statisticalsCategory();
+        return res.status(200).json({ data: statisticals });
+    }
+    async statisticalsNumUser(res) {
+        const statisticals = await this.adminService.statisticalsNumUser();
+        return res.status(200).json({ data: statisticals });
+    }
+    async statisticalsNumFreeLance(res) {
+        const statisticals = await this.adminService.statisticalsNumFreeLance();
+        return res.status(200).json({ data: statisticals });
+    }
+    async showComplaint() {
+        return await this.adminService.showComplaint();
+    }
+    async statisticalsComplaint() {
+        return await this.adminService.statisticalsComplaint();
     }
 };
 __decorate([
@@ -76,13 +94,45 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AdminContoller.prototype, "blockUser", null);
 __decorate([
-    (0, common_1.Post)('updateLicnse'),
-    __param(0, (0, common_1.Body)('amount')),
-    __param(1, (0, common_1.Response)()),
+    (0, common_1.Get)('statisticalsCategoryWeekly'),
+    __param(0, (0, common_1.Response)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], AdminContoller.prototype, "updateLicnse", null);
+], AdminContoller.prototype, "statisticalsCategoryWeekly", null);
+__decorate([
+    (0, common_1.Get)('statisticalsCategory'),
+    __param(0, (0, common_1.Response)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], AdminContoller.prototype, "statisticalsCategory", null);
+__decorate([
+    (0, common_1.Get)('statisticalsNumUser'),
+    __param(0, (0, common_1.Response)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], AdminContoller.prototype, "statisticalsNumUser", null);
+__decorate([
+    (0, common_1.Get)('statisticalsNumFreeLance'),
+    __param(0, (0, common_1.Response)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], AdminContoller.prototype, "statisticalsNumFreeLance", null);
+__decorate([
+    (0, common_1.Get)('showComplaint'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], AdminContoller.prototype, "showComplaint", null);
+__decorate([
+    (0, common_1.Get)('statisticalsComplaint'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], AdminContoller.prototype, "statisticalsComplaint", null);
 AdminContoller = __decorate([
     (0, common_1.UseFilters)(global_exception_filter_1.HttpExceptionFilter),
     (0, common_1.Controller)('api/admin'),

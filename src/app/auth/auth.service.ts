@@ -1,14 +1,12 @@
 import {  BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { User, UserRole } from '../../database/models/user.model';
-import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
-import { Repository } from 'typeorm';
 import { hash, compare } from 'bcrypt';
 import { validate } from 'class-validator';
 import { FreeLance } from 'src/database/models/freeLance.model';
-
-
+import path from "path";
+import * as fs from 'fs';
 @Injectable()
 export class AuthService {
   constructor(
@@ -62,6 +60,7 @@ let newUsers=null;
       const errorMessages = validationErrors.map((error) => Object.values(error.constraints));
       throw new BadRequestException(errorMessages);
     }  
+   
     await this.FreeLacneModele.create(freeLance
       ,transactionHost);
     }

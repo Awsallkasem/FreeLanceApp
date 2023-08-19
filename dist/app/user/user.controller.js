@@ -15,14 +15,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
 const common_1 = require("@nestjs/common");
 const user_service_1 = require("./user.service");
-const Publish_model_1 = require("../../database/models/Publish.model");
+const post_model_1 = require("../../database/models/post.model");
 const global_exception_filter_1 = require("../../filters/global-exception.filter");
 let UserController = class UserController {
     constructor(userservice) {
         this.userservice = userservice;
     }
     async newPost(post, req, res) {
-        const createPublication = new Publish_model_1.Published(post);
+        const createPublication = new post_model_1.Posts(post);
         const newPublication = await this.userservice.createPost(createPublication.dataValues, req.body.user);
         return res.status(201).json({ message: 'New post uploaded', post: newPublication });
     }
@@ -43,9 +43,45 @@ let UserController = class UserController {
         const rateFreeLance = await this.userservice.rateFreeLance(parseInt(id), userId, rate);
         return res.status(200).json({ rate: rateFreeLance });
     }
-    async acceptRequest(id, res) {
-        const service = await this.userservice.acceptRequest(parseInt(id));
+    async acceptRequest(id, res, req) {
+        const service = await this.userservice.acceptRequest(parseInt(id), req.body.user.id);
         return res.status(200).json({ service: service });
+    }
+    async serchAboutFreeLance(res, Fname, Lname) {
+        const freeLace = await this.userservice.searchAboutFreeLance(Fname, Lname);
+        return res.status(200).json({ date: freeLace });
+    }
+    async getAllCategory(res) {
+        const data = await this.userservice.showAllCategory();
+        return res.status(200).json({ data: data });
+    }
+    async searchAboutCategory(name, res) {
+        const data = await this.userservice.searchAboutCategory(name);
+        return res.status(200).json({ data: data });
+    }
+    async adddRequestOnPostPoint(id, req, res) {
+        const newRequest = await this.userservice.adddRequestOnPostPoint(parseInt(id), req.body.user.id);
+        return res.status(201).json({ data: newRequest });
+    }
+    async deletePost(id, res) {
+        const del = await this.userservice.deletRequest(parseInt(id));
+        return res.status(200).json({ data: "done" });
+    }
+    async showMyRequests(req, res) {
+        const showMine = await this.userservice.showMyRequests(req.body.user.id);
+        return res.status(200).json({ data: showMine });
+    }
+    async showPostpoint(res) {
+        const posts = await this.userservice.showPostpoint();
+        return res.status(200).json({ data: posts });
+    }
+    async showPostpointByCategory(res, category) {
+        const posts = await this.userservice.showPostPointByCategory(category);
+        return res.status(200).json({ data: posts });
+    }
+    async addComplaint(req, res, serviceId, content) {
+        const addComplaint = await this.userservice.addComplaint(parseInt(serviceId), req.body.user.id, content);
+        return res.status(201).json({ data: addComplaint });
     }
 };
 __decorate([
@@ -54,7 +90,7 @@ __decorate([
     __param(1, (0, common_1.Request)()),
     __param(2, (0, common_1.Response)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Publish_model_1.Published, Object, Object]),
+    __metadata("design:paramtypes", [post_model_1.Posts, Object, Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "newPost", null);
 __decorate([
@@ -95,10 +131,85 @@ __decorate([
     (0, common_1.Post)('acceptRequest/:id'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Response)()),
+    __param(2, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object, Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "acceptRequest", null);
+__decorate([
+    (0, common_1.Post)('searchaboutFreeLance'),
+    __param(0, (0, common_1.Response)()),
+    __param(1, (0, common_1.Body)('Fname')),
+    __param(2, (0, common_1.Body)('Lname')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String, String]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "serchAboutFreeLance", null);
+__decorate([
+    (0, common_1.Get)('allCategory'),
+    __param(0, (0, common_1.Response)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "getAllCategory", null);
+__decorate([
+    (0, common_1.Post)('searchAboutCategory'),
+    __param(0, (0, common_1.Body)('name')),
+    __param(1, (0, common_1.Response)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
-], UserController.prototype, "acceptRequest", null);
+], UserController.prototype, "searchAboutCategory", null);
+__decorate([
+    (0, common_1.Post)('adddRequestOnPostPoint/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Request)()),
+    __param(2, (0, common_1.Response)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object, Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "adddRequestOnPostPoint", null);
+__decorate([
+    (0, common_1.Delete)('deleteRequest/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Response)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "deletePost", null);
+__decorate([
+    (0, common_1.Get)('showMyRequests'),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Response)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "showMyRequests", null);
+__decorate([
+    (0, common_1.Get)('showPostpoint'),
+    __param(0, (0, common_1.Response)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "showPostpoint", null);
+__decorate([
+    (0, common_1.Get)('showPostpointByCategory/:category'),
+    __param(0, (0, common_1.Response)()),
+    __param(1, (0, common_1.Param)('category')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "showPostpointByCategory", null);
+__decorate([
+    (0, common_1.Post)('addComplaint/:serviceId'),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Response)()),
+    __param(2, (0, common_1.Param)('serviceId')),
+    __param(3, (0, common_1.Body)('content')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Object, String]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "addComplaint", null);
 UserController = __decorate([
     (0, common_1.UseFilters)(global_exception_filter_1.HttpExceptionFilter),
     (0, common_1.Controller)('api/user'),

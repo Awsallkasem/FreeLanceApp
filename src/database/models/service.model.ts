@@ -1,7 +1,8 @@
-import { AutoIncrement, BelongsTo, Column, DataType, ForeignKey, Model, PrimaryKey, Table } from 'sequelize-typescript';
-import { Published } from './Publish.model';
+import { AutoIncrement, BelongsTo, Column, DataType, ForeignKey, HasMany, Model, PrimaryKey, Table } from 'sequelize-typescript';
+import { Posts } from './post.model';
 import { IsNotEmpty } from 'class-validator';
 import { FreeLance } from './freeLance.model';
+import { Complaint } from './complaint.model';
 
 @Table({ tableName: 'service' })
 export class Service extends Model<Service> {
@@ -21,18 +22,26 @@ export class Service extends Model<Service> {
     @Column({
         type: DataType.DATEONLY, 
       })
-      date: Date;
+      Sdate: Date;
 
+      @Column({
+        type: DataType.DATEONLY, 
+      })
+      Edate: Date;
+
+      @Column({type:DataType.STRING})
+      filePath:string;
+      
       @Column({ type: DataType.BOOLEAN, defaultValue: false })
       isAccepted: boolean
 
-      @ForeignKey(() => Published)
+      @ForeignKey(() => Posts)
       @Column({type :DataType.INTEGER,allowNull:false})
       @IsNotEmpty({ message: 'publishedId is required' })
       publishedId: number;
     
-      @BelongsTo(() => Published)
-      published: Published;
+      @BelongsTo(() => Posts)
+      published: Posts;
 
       @ForeignKey(() => FreeLance)
       @Column({type :DataType.INTEGER,allowNull:false})
@@ -41,6 +50,9 @@ export class Service extends Model<Service> {
     
       @BelongsTo(() => FreeLance)
       freelane: FreeLance;
+
+      @HasMany(()=>Complaint,{ onDelete: 'cascade', hooks:true })
+      complaint:Complaint;
     
     
 }

@@ -16,12 +16,16 @@ exports.AdminService = void 0;
 const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
 const sequelize_1 = require("@nestjs/sequelize");
-const licnse_model_1 = require("../../database/models/licnse.model");
+const complaint_model_1 = require("../../database/models/complaint.model");
+const freeLance_model_1 = require("../../database/models/freeLance.model");
+const payAndRecive_model_1 = require("../../database/models/payAndRecive.model");
+const service_model_1 = require("../../database/models/service.model");
 const user_model_1 = require("../../database/models/user.model");
 let AdminService = class AdminService {
-    constructor(Usermodele, LicnseModel, jwtService) {
+    constructor(Usermodele, payAndReciveModele, complaintModele, jwtService) {
         this.Usermodele = Usermodele;
-        this.LicnseModel = LicnseModel;
+        this.payAndReciveModele = payAndReciveModele;
+        this.complaintModele = complaintModele;
         this.jwtService = jwtService;
     }
     async showAllRequest() {
@@ -32,47 +36,103 @@ let AdminService = class AdminService {
             return user;
         }
         else
-            return null;
+            throw new common_1.NotFoundException('there no data');
     }
     async acceptRequest(id) {
-        const user = await this.findUserByIs(id);
-        const date = new Date();
-        const nextMonth = date.getMonth();
-        date.setMonth(nextMonth);
-        user.Activatedat = date;
+        const user = await this.findUserById(id);
         user.isActive = true;
         return await user.save();
     }
     async rejectRequest(id) {
-        const user = await this.findUserByIs(id);
+        const user = await this.findUserById(id);
         user.isReject = true;
         return await user.save();
     }
     async blockUser(id) {
-        const user = await this.findUserByIs(id);
+        const user = await this.findUserById(id);
         if (user.role == user_model_1.UserRole.ADMIN) {
             throw new common_1.UnauthorizedException('access denied');
         }
         user.isBlocked = true;
         return await user.save();
     }
-    async findUserByIs(id) {
+    async findUserById(id) {
         const user = await this.Usermodele.findOne({
             where: { id: id },
         });
+        if (!user) {
+            throw new common_1.NotFoundException('there no data');
+        }
         return user;
     }
-    async updateLicnces(amount) {
-        const licnse = await this.LicnseModel.findByPk(1);
-        licnse.amount = amount;
-        return await licnse.save();
+    async statisticalsCategoryWeekly() {
+        const year = new Date();
+        const statisticals = await this.payAndReciveModele.statisticalsCategoryweekly(year.getFullYear());
+        if (!statisticals) {
+            throw new common_1.NotFoundException('there no data');
+        }
+        return statisticals;
+    }
+    async statisticalsCategory() {
+        const year = new Date();
+        const statisticals = await this.payAndReciveModele.statisticalsCategory();
+        if (!statisticals) {
+            throw new common_1.NotFoundException('there no data');
+        }
+        return statisticals;
+    }
+    async statisticalsNumUser() {
+        const year = new Date();
+        const statisticals = await this.Usermodele.statisticalsNumUser(year.getFullYear());
+        if (!statisticals) {
+            throw new common_1.NotFoundException('there no data');
+        }
+        return statisticals;
+    }
+    async statisticalsNumFreeLance() {
+        const year = new Date();
+        const statisticals = await this.Usermodele.statisticalsNumFreeLance(year.getFullYear());
+        if (!statisticals) {
+            throw new common_1.NotFoundException('there no data');
+        }
+        return statisticals;
+    }
+    async statisticalsComplaint() {
+        const statisticals = await this.complaintModele.statisticalComplaints();
+        if (!statisticals) {
+            throw new common_1.NotFoundException('there no data');
+        }
+        return statisticals;
+    }
+    async showComplaint() {
+        const complaints = await this.complaintModele.findAll({
+            include: [{
+                    model: user_model_1.User,
+                    attributes: { exclude: ['password', 'updatedAt', 'createdAt', 'isBlocked', 'isReject', 'isActive'] },
+                },
+                {
+                    model: service_model_1.Service,
+                    include: [{
+                            model: freeLance_model_1.FreeLance,
+                            include: [{
+                                    model: user_model_1.User,
+                                    attributes: { exclude: ['password', 'updatedAt', 'createdAt', 'isBlocked', 'isReject', 'isActive'] },
+                                }]
+                        }]
+                }]
+        });
+        if (!complaints) {
+            throw new common_1.NotFoundException('there no data');
+        }
+        return complaints;
     }
 };
 AdminService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, sequelize_1.InjectModel)(user_model_1.User)),
-    __param(1, (0, sequelize_1.InjectModel)(licnse_model_1.Licens)),
-    __metadata("design:paramtypes", [Object, Object, jwt_1.JwtService])
+    __param(1, (0, sequelize_1.InjectModel)(payAndRecive_model_1.PayAndRecive)),
+    __param(2, (0, sequelize_1.InjectModel)(complaint_model_1.Complaint)),
+    __metadata("design:paramtypes", [Object, Object, Object, jwt_1.JwtService])
 ], AdminService);
 exports.AdminService = AdminService;
 //# sourceMappingURL=admin.service.js.map

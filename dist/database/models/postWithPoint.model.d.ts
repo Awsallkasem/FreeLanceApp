@@ -1,6 +1,7 @@
 import { Model } from 'sequelize-typescript';
-import { User } from './user.model';
-import { Service } from './service.model';
+import { FreeLance } from './freeLance.model';
+import { UserRequest } from './userRequest.model';
+import { StaggingToPoint } from './staggingToPoint.model';
 export declare enum FreelanceCategory {
     WebDevelopment = "Web Development",
     MobileDevelopment = "Mobile Development",
@@ -93,14 +94,14 @@ export declare enum FreelanceCategory {
     UXDesignResearch = "UX Design Research",
     TechnicalSupport = "Technical Support"
 }
-export declare class Published extends Model<Published> {
+export declare class postWithPoint extends Model<postWithPoint> {
     id: number;
-    content: string;
     category: FreelanceCategory;
-    fileName: string;
-    fileType: string;
-    services: Service[];
-    userId: number;
-    user: User;
-    static IsRequired(instance: Published): Promise<void>;
+    content: string;
+    price: number;
+    numDays: number;
+    freelaneId: number;
+    freelane: FreeLance;
+    userRequest: UserRequest[];
+    stagging: StaggingToPoint[];
 }

@@ -98,8 +98,8 @@ export enum FreelanceCategory {
     TechnicalSupport = 'Technical Support',
   }
 
-@Table({ tableName: 'publish' })
-export class Published extends Model<Published>  {
+@Table({ tableName: 'post' })
+export class Posts extends Model<Posts>  {
   @PrimaryKey
   @AutoIncrement
   @Column({ type: DataType.INTEGER })
@@ -113,13 +113,8 @@ export class Published extends Model<Published>  {
   @IsNotEmpty({ message: 'category is required' })
   category: FreelanceCategory;
 
-  @Column({ type: DataType.STRING })
-  fileName: string;
 
-  @Column({ type: DataType.STRING })
-  fileType: string;
-
-  @HasMany(() => Service)
+  @HasMany(() => Service,{ onDelete: 'cascade', hooks:true })
   services: Service[];
 
 
@@ -131,14 +126,4 @@ export class Published extends Model<Published>  {
   @BelongsTo(() => User)
   user: User;
 
-  
-
-  @BeforeCreate
-  static async IsRequired(instance: Published) {
-
-    if (instance.fileName) {
-      if (!instance.fileType)
-        throw new Error('Required value is missing');
-    }
-  }
 }

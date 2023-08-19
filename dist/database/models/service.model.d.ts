@@ -1,14 +1,18 @@
 import { Model } from 'sequelize-typescript';
-import { Published } from './Publish.model';
+import { Posts } from './post.model';
 import { FreeLance } from './freeLance.model';
+import { Complaint } from './complaint.model';
 export declare class Service extends Model<Service> {
     id: number;
     price: number;
     numDays: number;
-    date: Date;
+    Sdate: Date;
+    Edate: Date;
+    filePath: string;
     isAccepted: boolean;
     publishedId: number;
-    published: Published;
+    published: Posts;
     freelaneId: number;
     freelane: FreeLance;
+    complaint: Complaint;
 }
