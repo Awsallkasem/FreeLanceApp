@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/sequelize';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -18,6 +18,8 @@ export class AdminService {
     private readonly payAndReciveModele: typeof PayAndRecive,
     @InjectModel(Complaint)
     private readonly complaintModele: typeof Complaint,
+    @InjectModel(FreeLance)
+    private readonly freeLanceModele:typeof FreeLance,
     private readonly jwtService: JwtService,
   ) { }
 
@@ -47,10 +49,12 @@ export class AdminService {
   }
 
   async blockUser(id: number) {
-    const user = await this.findUserById(id);
-    if (user.role == UserRole.ADMIN) {
-      throw new UnauthorizedException('access denied');
+    const freeLance=await this.freeLanceModele.findByPk(id);
+    if(!freeLance){
+      throw new NotFoundException();
     }
+    const user = await this.findUserById(freeLance.userId);
+  
     user.isBlocked = true;
     return await user.save();
   }
@@ -134,10 +138,11 @@ export class AdminService {
 
     return complaints;
   }
-  async returnHisCoin(id: number,complaintId:number) {
-    const user = await this.findUserById(id);
-    
-    const complaints = await this.complaintModele.findOne({where:{id:complaintId,userId:id},
+  async returnHisCoin(complaintId:number) {
+    if(!complaintId){
+      throw new BadRequestException('enter required fields');
+    }
+    const complaints = await this.complaintModele.findOne({where:{id:complaintId},
       include: [{
         model: User,
         attributes: { exclude: ['password', 'updatedAt', 'createdAt', 'isBlocked', 'isReject', 'isActive'] },
@@ -153,7 +158,10 @@ export class AdminService {
         }]
       }]
     });
-
+    const user = await this.findUserById(complaints.userId);
+if(!user ){
+  throw new NotFoundException('there no data');
+}
     user.walletBalance += complaints.service.price;
     return await user.save();
   }

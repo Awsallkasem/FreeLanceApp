@@ -19,12 +19,5 @@ export class WalletController {
     return this.walletService.deposit(id, amount);
   }
 
-  @Post(':from/transfer/:to')
-  async transfer(
-    @Param('from') from: number,
-    @Param('to') to: number,
-    @Body('amount') amount: number,
-  ) {
-    return this.walletService.transfer(from, to, amount);
-  }
+  
 }

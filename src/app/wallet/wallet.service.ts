@@ -35,31 +35,5 @@ export class WalletService {
     return user.walletBalance;
   }
 
-  async transfer(fromUserId: number, toUserId: number, amount: number) {
-    const fromUser = await this.userModel.findOne({ where: { id: fromUserId } });
-    const toUser = await this.userModel.findOne({ where: { id: toUserId } });
-
-    if (!fromUser || !toUser) {
-      throw new NotFoundException('Invalid user ID');
-    }
-
-    if (fromUser.walletBalance < amount) {
-      throw new BadRequestException('Insufficient balance');
-    }
-
-    fromUser.walletBalance -= amount;
-    toUser.walletBalance += amount;
-    try {
-      await this.userModel.sequelize.transaction(async t => {
-        const transactionHost = { transaction: t };
-        fromUser.save(transactionHost);
-        toUser.save(transactionHost);
-      });
-    } catch (e) {
-      throw new Error(e);
-    }
-
-
-    return { fromWalletBalance: fromUser.walletBalance, toWalletBalance: toUser.walletBalance };
-  }
+  
 }

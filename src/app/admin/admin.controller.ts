@@ -71,6 +71,12 @@ return await this.adminService.showComplaint();
   @Get('statisticalsComplaint')
   async statisticalsComplaint(){
 return await this.adminService.statisticalsComplaint();
+  }
 
+  @Post('returnHisCoin')
+  async returnHisCoin(@Body('complaintId') complaintId :number,@Response() res){
+const complaintResult=await this.adminService.returnHisCoin(complaintId);
+
+return complaintResult;
   }
 }
