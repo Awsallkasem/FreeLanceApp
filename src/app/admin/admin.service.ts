@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/sequelize';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Licens } from 'src/database/models/licnse.model';
 import { User, UserRole } from 'src/database/models/user.model';
 import { Repository } from 'typeorm';
 
@@ -10,6 +11,8 @@ export class AdminService {
   constructor(
     @InjectModel(User)
     private readonly Usermodele:typeof User,
+    @InjectModel(Licens)
+    private LicnseModel:typeof Licens,
     private readonly jwtService: JwtService,
   ) { }
 
@@ -30,9 +33,9 @@ export class AdminService {
     const user = await this.findUserByIs(id);
 
     const date = new Date();
-const nextYear = date.getFullYear()+ 1;
+const nextMonth = date.getMonth();
 
-date.setFullYear(nextYear);
+date.setMonth(nextMonth);
     user.Activatedat=date;
     user.isActive = true;
     return await user.save();
@@ -59,6 +62,12 @@ date.setFullYear(nextYear);
       where: { id: id },
     });
     return user;
+  }
+  async updateLicnces(amount:number){
+const licnse=await this.LicnseModel.findByPk(1);
+licnse.amount=amount
+return await licnse.save();
+
   }
 
 }

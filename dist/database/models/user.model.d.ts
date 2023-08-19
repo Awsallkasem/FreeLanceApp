@@ -26,9 +26,11 @@ export declare class User extends Model<User> implements UserAttributes {
     Lname: string;
     password: string;
     phone: string;
+    walletBalance: number;
     isActive: boolean;
     isReject: boolean;
     isBlocked: boolean;
+    Activatedat: Date;
     publisheds: Published[];
     freeLances: FreeLance;
     ranks: Published[];

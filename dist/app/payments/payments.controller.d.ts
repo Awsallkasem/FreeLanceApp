@@ -1,8 +1,10 @@
 import { paymentService } from './payments.service';
-export declare class PaymentsController {
-    private readonly paymentService;
-    constructor(paymentService: paymentService);
-    createPayment(id: string, res: any, req: any): Promise<any>;
-    success(serviceId: string, res: any, userId: string): Promise<any>;
-    cancel(res: any): Promise<any>;
+export declare class PayPalController {
+    private readonly payPalService;
+    constructor(payPalService: paymentService);
+    receiveMoney(amount: any, res: any, req: any): Promise<{
+        message: string;
+    }>;
+    sendMoney(amount: any, res: any, req: any): Promise<any>;
+    success(res: any, req: any): Promise<any>;
 }

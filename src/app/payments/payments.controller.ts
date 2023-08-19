@@ -1,34 +1,33 @@
-import { Controller, Get,Request, Response,Param } from '@nestjs/common';
-import { paymentService } from './payments.service';
+ import {  Get,Request, Response,Param, UseFilters, BadRequestException } from '@nestjs/common';
+ import { paymentService } from './payments.service';
+ import { Controller, Post, Body } from '@nestjs/common';
+import { HttpExceptionFilter } from 'src/filters/global-exception.filter';
 
-@Controller('api/payments/')
-export class PaymentsController {
-  constructor(private readonly paymentService: paymentService) {}
+@UseFilters(HttpExceptionFilter)
+ @Controller('api/payments/')
+export class PayPalController {
+  constructor(private readonly payPalService: paymentService) {}
 
-  @Get('create/:id')
-  async createPayment(@Param('id') id :string,@Response() res,@Request() req): Promise<any> {
-    try {
-      const payment = await this.paymentService.createPayment(parseInt(id),req.body.user.id);
-      for (var index = 0; index < payment.links.length; index++) {
-        if (payment.links[index].rel === 'approval_url') {
-            res.redirect(payment.links[index].href);
-        }
-    }      return payment;
-    } catch (error) {
-      console.error(error);
-      throw new Error('Payment creation failed');
+  @Get('receive-money/:amount')
+  async receiveMoney(@Param('amount') amount,@Response() res,@Request() req ) {
+    if(!amount){
+      throw new BadRequestException('amount is required');
     }
+   res.redirect( await this.payPalService.receiveMoney(parseInt(amount),1));
+    return { message: 'Payment received successfully.' };
   }
-  @Get('success/:serviceId/:userId')
-  async success(@Param('serviceId') serviceId :string,@Response( ) res,@Param('userId') userId:string){
-      const payment=await this.paymentService.success(parseInt(userId),parseInt(serviceId));
+
+  @Get('send-money/:amount')
+  async sendMoney(@Param('amount') amount,@Response() res,@Request() req ) {
+    if(!amount){
+      throw new BadRequestException('amount is required');
+    }
+ const message=   await this.payPalService.sendMoney(parseInt(amount),3 );
+    return res.status(200).send({ message:message });
+  }
+  @Get('success')
+  async success(@Response( ) res,@Request() req){
+      const payment=await this.payPalService.success(req);
 return res.status(201).json({message:'done'});
   }
-  @Get('cancel')
-  async cancel(@Response() res){
-      return res.status(200).jsone({message:'canceled'});
-  
-  }
-    
-
 }

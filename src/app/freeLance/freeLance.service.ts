@@ -6,6 +6,9 @@ import { FreelanceCategory, Published } from "src/database/models/Publish.model"
 import { FreeLance } from "src/database/models/freeLance.model";
 import { Service } from "src/database/models/service.model";
 import { User } from "src/database/models/user.model";
+import { Op } from 'sequelize';
+import { Payment } from "src/database/models/payment.model";
+
 
 
 @Injectable()
@@ -19,6 +22,8 @@ export class FreeLanceService {
     private readonly ServiceModel: typeof Service,
     @InjectModel(Published)
     private publishModel: typeof Published,
+    @InjectModel(Payment)
+    private readonly PaymentModel :typeof Payment,
     private readonly jwtService: JwtService,
 
   ) { }
@@ -129,5 +134,42 @@ async showAcceptedServices(id :number){
       throw new NotFoundException('category not found');
     }
     return FreelanceCategory[foundKey];
+  }
+
+
+  async showMonthMony(month :number){
+    const payamentsInMonth=await this.PaymentModel.findAll({where:{
+      date:{
+        [Op.and]: [
+          { [Op.gte]: new Date(new Date().getFullYear(), month - 1, 1) }, 
+          { [Op.lte]: new Date(new Date().getFullYear(), month, 0) } 
+        ]
+      }
+    }});
+if(!payamentsInMonth){
+  throw new NotFoundException('there no thing');
+}
+
+return payamentsInMonth;
+
+  }
+
+
+  
+  async showYearMoney(year:number){
+    const payamentsInYear=await this.PaymentModel.findAll({where:{
+      date:{
+        [Op.and]: [
+          { [Op.gte]: new Date(year,0, 1) }, 
+          { [Op.lte]: new Date(year, 11, 31) } 
+        ]
+      }
+    }});
+if(!payamentsInYear){
+  throw new NotFoundException('there no thing');
+}
+
+return payamentsInYear;
+
   }
 }

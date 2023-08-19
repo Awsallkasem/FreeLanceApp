@@ -8,10 +8,12 @@ import { FreeLance } from './models/freeLance.model';
 import { Sequelize } from 'sequelize';
 import { Service } from './models/service.model';
 import { Payment } from './models/payment.model';
+import { Licens } from './models/licnse.model';
+import { Payout } from './models/payout.model';
 
 
 @Module({
-  imports:[SequelizeModule.forFeature([User,Published,Rating,Service,FreeLance,Payment])],
+  imports:[SequelizeModule.forFeature([User,Published,Rating,Service,FreeLance,Payment,Licens,Payout])],
   providers: [...databaseProviders],
   exports: [...databaseProviders,SequelizeModule],
 })

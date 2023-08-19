@@ -25,6 +25,8 @@ let FreeLanceController = class FreeLanceController {
         const posts = await this.freeLanceService.getAllPost();
         return res.status(200).json({ posts: posts });
     }
+    async getPostInterstes(res) {
+    }
     async getAllPostByCategory(category, res) {
         const posts = await this.freeLanceService.getAllPostByCategory(category);
         return res.status(200).json({ posts: posts });
@@ -42,6 +44,14 @@ let FreeLanceController = class FreeLanceController {
         const services = await this.freeLanceService.showAcceptedServices(req.body.user.id);
         return res.status(200).json({ services: services });
     }
+    async paymentInYear(year, res) {
+        const payments = await this.freeLanceService.showYearMoney(parseInt(year));
+        return res.status(200).json({ payment: payments });
+    }
+    async paymentInMont(month, res) {
+        const payments = await this.freeLanceService.showMonthMony(parseInt(month));
+        return res.status(200).json({ payment: payments });
+    }
 };
 __decorate([
     (0, common_1.Get)('getAllPost'),
@@ -50,6 +60,13 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], FreeLanceController.prototype, "getAllPost", null);
+__decorate([
+    (0, common_1.Get)('getPostAboutInterstes'),
+    __param(0, (0, common_1.Response)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], FreeLanceController.prototype, "getPostInterstes", null);
 __decorate([
     (0, common_1.Get)('getAllPostByCategory/:category'),
     __param(0, (0, common_1.Param)()),
@@ -84,6 +101,22 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], FreeLanceController.prototype, "showAcceptedServices", null);
+__decorate([
+    (0, common_1.Get)('paymentinYear/:year'),
+    __param(0, (0, common_1.Param)('year')),
+    __param(1, (0, common_1.Response)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], FreeLanceController.prototype, "paymentInYear", null);
+__decorate([
+    (0, common_1.Get)('paymentinMonth/:month'),
+    __param(0, (0, common_1.Param)('month')),
+    __param(1, (0, common_1.Response)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], FreeLanceController.prototype, "paymentInMont", null);
 FreeLanceController = __decorate([
     (0, common_1.UseFilters)(global_exception_filter_1.HttpExceptionFilter),
     (0, common_1.Controller)('api/freeLace/'),

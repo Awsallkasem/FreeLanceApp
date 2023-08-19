@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { sequelizeConfig } from './config/sequelize.config';
 import { DatabaseModule } from './database/database.module';
 import { UserModule } from './app/user/user.module';
 import { AdminModule } from './app/admin/admin.module';
 import { FreeLacneModule } from './app/freeLance/freeLance.module';
-import { PaymentsMoudle } from './app/payments/payaments.module';
+import { PayPalModule } from './app/payments/payaments.module';
+import { sequelizeConfig } from './config/sequelize.config';
 
 @Module({
   imports: [
@@ -15,7 +15,7 @@ import { PaymentsMoudle } from './app/payments/payaments.module';
     UserModule,
     FreeLacneModule,
     AdminModule,
-    PaymentsMoudle
+    PayPalModule
 
   ],
   controllers:[]

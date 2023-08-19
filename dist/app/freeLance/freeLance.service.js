@@ -21,12 +21,15 @@ const Publish_model_1 = require("../../database/models/Publish.model");
 const freeLance_model_1 = require("../../database/models/freeLance.model");
 const service_model_1 = require("../../database/models/service.model");
 const user_model_1 = require("../../database/models/user.model");
+const sequelize_2 = require("sequelize");
+const payment_model_1 = require("../../database/models/payment.model");
 let FreeLanceService = class FreeLanceService {
-    constructor(UserModel, FreeLanceModel, ServiceModel, publishModel, jwtService) {
+    constructor(UserModel, FreeLanceModel, ServiceModel, publishModel, PaymentModel, jwtService) {
         this.UserModel = UserModel;
         this.FreeLanceModel = FreeLanceModel;
         this.ServiceModel = ServiceModel;
         this.publishModel = publishModel;
+        this.PaymentModel = PaymentModel;
         this.jwtService = jwtService;
     }
     async getAllPost() {
@@ -114,6 +117,34 @@ let FreeLanceService = class FreeLanceService {
         }
         return Publish_model_1.FreelanceCategory[foundKey];
     }
+    async showMonthMony(month) {
+        const payamentsInMonth = await this.PaymentModel.findAll({ where: {
+                date: {
+                    [sequelize_2.Op.and]: [
+                        { [sequelize_2.Op.gte]: new Date(new Date().getFullYear(), month - 1, 1) },
+                        { [sequelize_2.Op.lte]: new Date(new Date().getFullYear(), month, 0) }
+                    ]
+                }
+            } });
+        if (!payamentsInMonth) {
+            throw new common_1.NotFoundException('there no thing');
+        }
+        return payamentsInMonth;
+    }
+    async showYearMoney(year) {
+        const payamentsInYear = await this.PaymentModel.findAll({ where: {
+                date: {
+                    [sequelize_2.Op.and]: [
+                        { [sequelize_2.Op.gte]: new Date(year, 0, 1) },
+                        { [sequelize_2.Op.lte]: new Date(year, 11, 31) }
+                    ]
+                }
+            } });
+        if (!payamentsInYear) {
+            throw new common_1.NotFoundException('there no thing');
+        }
+        return payamentsInYear;
+    }
 };
 FreeLanceService = __decorate([
     (0, common_1.Injectable)(),
@@ -121,7 +152,8 @@ FreeLanceService = __decorate([
     __param(1, (0, sequelize_1.InjectModel)(freeLance_model_1.FreeLance)),
     __param(2, (0, sequelize_1.InjectModel)(service_model_1.Service)),
     __param(3, (0, sequelize_1.InjectModel)(Publish_model_1.Published)),
-    __metadata("design:paramtypes", [Object, Object, Object, Object, jwt_1.JwtService])
+    __param(4, (0, sequelize_1.InjectModel)(payment_model_1.Payment)),
+    __metadata("design:paramtypes", [Object, Object, Object, Object, Object, jwt_1.JwtService])
 ], FreeLanceService);
 exports.FreeLanceService = FreeLanceService;
 //# sourceMappingURL=freeLance.service.js.map

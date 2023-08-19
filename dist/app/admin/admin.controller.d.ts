@@ -6,4 +6,5 @@ export declare class AdminContoller {
     acceptRequest(id: string, res: any): Promise<any>;
     rejectRequest(id: string, res: any): Promise<any>;
     blockUser(id: string, res: any): Promise<any>;
+    updateLicnse(amount: number, res: any): Promise<any>;
 }

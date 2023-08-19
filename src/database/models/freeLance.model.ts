@@ -4,6 +4,7 @@ import { User } from './user.model';
 import { Rating } from './rating.model';
 import { Service } from './service.model';
 import { Payment } from './payment.model';
+import { Payout } from './payout.model';
 // import { File } from './file.model';
 
 
@@ -36,14 +37,7 @@ export class FreeLance extends Model<FreeLance>  {
   link: string
 
 
-  @Column({ type: DataType.STRING ,allowNull:false})
-  @IsNotEmpty({ message: 'client secret is required' })
-  client_secret: string
-
-  @Column({ type: DataType.STRING ,allowNull:false})
-  @IsNotEmpty({ message: 'client id is required' })
-  client_id: string
-
+ 
   @Column({ type: DataType.ENUM(...Object.values(JobTittle)) ,allowNull:false})
   @IsNotEmpty({ message: 'jobTittle is required' })
   jobTittle: JobTittle
@@ -60,8 +54,8 @@ export class FreeLance extends Model<FreeLance>  {
   @HasMany(() => Rating)
   rating: Rating[];
   
-  @HasMany(() => Payment)
-  payments: Payment[];
+  @HasMany(() => Payout)
+  payouts: Payout[];
 
   @HasMany(() => Service)
   services: Service[];

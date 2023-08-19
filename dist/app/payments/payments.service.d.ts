@@ -1,9 +1,15 @@
 import { Payment } from 'src/database/models/payment.model';
-import { Service } from 'src/database/models/service.model';
+import { User } from 'src/database/models/user.model';
+import { Request } from 'express';
+import { Payout } from 'src/database/models/payout.model';
+import { FreeLance } from 'src/database/models/freeLance.model';
 export declare class paymentService {
-    private readonly PaymentModele;
-    private readonly ServiceModel;
-    constructor(PaymentModele: typeof Payment, ServiceModel: typeof Service);
-    createPayment(id: number, userId: number): Promise<any>;
-    success(userId: any, serviceId: any): Promise<boolean>;
+    private readonly payoutModele;
+    private readonly UserModel;
+    private readonly FreeLanceModel;
+    private readonly logger;
+    constructor(payoutModele: typeof Payout, UserModel: typeof User, FreeLanceModel: typeof FreeLance);
+    receiveMoney(amount: number, userId: number): Promise<any>;
+    sendMoney(amount: number, userId: number): Promise<string>;
+    success(req: Request): Promise<Payment>;
 }

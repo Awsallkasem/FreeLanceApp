@@ -1,15 +1,14 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { decodeTokenMiddleware } from 'src/middlewares/authrization/decodeToken.middleware';
-import { JwtModule } from '@nestjs/jwt';
-import { AuthService } from 'src/app/auth/auth.service';
-import { DatabaseModule } from 'src/database/database.module';
-import { FreeLanceService } from 'src/app/freeLance/freeLance.service';
-import { PaymentsController } from './payments.controller';
+
+import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { PayPalController } from './payments.controller';
 import { paymentService } from './payments.service';
-import { UserMiddleware } from 'src/middlewares/authrization/user.middleware';
+import { decodeTokenMiddleware } from 'src/middlewares/authrization/decodeToken.middleware';
+import { DatabaseModule } from 'src/database/database.module';
+import { JwtModule } from '@nestjs/jwt';
+import { AuthService } from '../auth/auth.service';
 
 @Module({
-  imports: [
+  imports: [ 
     DatabaseModule,
 
     JwtModule.register({
@@ -17,17 +16,14 @@ import { UserMiddleware } from 'src/middlewares/authrization/user.middleware';
       signOptions: { expiresIn: '1h' }, // Configure token expiration
     }),
   ],
-  controllers: [PaymentsController],
-  providers: [AuthService,paymentService, FreeLanceService, decodeTokenMiddleware, UserMiddleware],
+  controllers: [PayPalController],
+  providers: [paymentService,AuthService,decodeTokenMiddleware],
 })
-export class PaymentsMoudle implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(decodeTokenMiddleware)
-      .forRoutes('api/payments/*')
-      .apply(UserMiddleware)
-      .forRoutes('api/payments/*');
+export class PayPalModule {
+  // configure(consumer: MiddlewareConsumer) {
+  //   consumer.apply(decodeTokenMiddleware)
+  //     .forRoutes('api/payments/*')
+// }
 
-  }
 }
-
   

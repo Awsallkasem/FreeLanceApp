@@ -17,6 +17,10 @@ async getAllPost(@Response() res){
   return res.status(200).json({posts:posts});
 }
 
+@Get('getPostAboutInterstes')
+async getPostInterstes(@Response() res){
+
+}
 
 
 @Get('getAllPostByCategory/:category')
@@ -44,6 +48,20 @@ return res.status(200).json({service:myService});
 async showAcceptedServices(@Request() req, @Response() res){
   const services=await this.freeLanceService.showAcceptedServices(req.body.user.id);
   return res.status(200).json({services:services});
+}
+
+@Get('paymentinYear/:year')
+async paymentInYear(@Param('year') year:string,@Response() res){
+   const payments=await this.freeLanceService.showYearMoney(parseInt(year));
+   return res.status(200).json({payment:payments});
+}
+
+
+
+@Get('paymentinMonth/:month')
+async paymentInMont(@Param('month') month:string,@Response() res){
+   const payments=await this.freeLanceService.showMonthMony(parseInt(month));
+   return res.status(200).json({payment:payments});
 }
 
 }

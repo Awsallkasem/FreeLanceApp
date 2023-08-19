@@ -38,20 +38,31 @@ let AuthService = class AuthService {
         }
         const saltRounds = 10;
         user.password = await (0, bcrypt_1.hash)(user.password, saltRounds);
-        const newUser = await this.userModel.create(user);
-        if (user.role == user_model_1.UserRole.FreeLnce) {
-            freeLance.userId = newUser.id;
-            if (freeLance) {
-                const validationErrors = await (0, class_validator_1.validate)(new freeLance_model_1.FreeLance(freeLance));
-                if (validationErrors.length > 0) {
-                    const errorMessages = validationErrors.map((error) => Object.values(error.constraints));
-                    throw new common_1.BadRequestException(errorMessages);
+        let newUsers = null;
+        try {
+            const newUser = await this.userModel.sequelize.transaction(async (t) => {
+                const transactionHost = { transaction: t };
+                newUsers = await this.userModel.create(user, transactionHost);
+                if (user.role == user_model_1.UserRole.FreeLnce) {
+                    console.log(newUsers.id);
+                    freeLance.userId = newUsers.id;
+                    console.log(freeLance.userId);
+                    if (freeLance) {
+                        const validationErrors = await (0, class_validator_1.validate)(new freeLance_model_1.FreeLance(freeLance));
+                        if (validationErrors.length > 0) {
+                            const errorMessages = validationErrors.map((error) => Object.values(error.constraints));
+                            throw new common_1.BadRequestException(errorMessages);
+                        }
+                        await this.FreeLacneModele.create(freeLance, transactionHost);
+                    }
                 }
-                const newFreeLance = await this.FreeLacneModele.create(freeLance);
-            }
+            });
+        }
+        catch (e) {
+            throw new common_1.BadRequestException(e);
         }
         const token = await this.login(user);
-        return { user: newUser, token };
+        return { user: newUsers, token };
     }
     async validatePassword(email, password) {
         const user = await this.findByEmail(email);

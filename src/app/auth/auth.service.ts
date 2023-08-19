@@ -36,25 +36,45 @@ async register(user: User,freeLance:FreeLance): Promise<{ user: User; token: str
   
  const saltRounds = 10;
   user.password = await hash(user.password,saltRounds);
+let newUsers=null;
+  try{
+  const newUser = await this.userModel.sequelize.transaction(async t => {
+    const transactionHost = { transaction: t };
 
-  const newUser = await this.userModel.create(user);
-  if(user.role==UserRole.FreeLnce){
-    freeLance.userId=newUser.id;
-  if(freeLance){  
-  const validationErrors = await validate(new FreeLance(freeLance));
-  if (validationErrors.length > 0) {
-    const errorMessages = validationErrors.map((error) => Object.values(error.constraints));
-    throw new BadRequestException(errorMessages);
-  }  
-  
-  const newFreeLance=await this.FreeLacneModele.create(freeLance);
+   newUsers= await this.userModel.create(
+      user,
+      transactionHost,
+    );
+
+
+
+
+
+    if(user.role==UserRole.FreeLnce){
+      console.log(newUsers.id);
+      freeLance.userId=newUsers.id;
+      console.log( freeLance.userId);
+
+    if(freeLance){  
+      
+    const validationErrors = await validate(new FreeLance(freeLance));
+    if (validationErrors.length > 0) {
+      const errorMessages = validationErrors.map((error) => Object.values(error.constraints));
+      throw new BadRequestException(errorMessages);
+    }  
+    await this.FreeLacneModele.create(freeLance
+      ,transactionHost);
+    }
+  }});
+}catch(e){
+  throw new BadRequestException(e);
 }
-  }
-  const token = await this.login(user);
 
-  return { user: newUser, token };
+const token = await this.login(user);
+
+return { user: newUsers, token };
+
 }
-
 
 
 async validatePassword(email: string, password: string): Promise<User | null> {

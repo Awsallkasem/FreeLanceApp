@@ -68,6 +68,10 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "phone", void 0);
 __decorate([
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.INTEGER, defaultValue: 0 }),
+    __metadata("design:type", Number)
+], User.prototype, "walletBalance", void 0);
+__decorate([
     (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.BOOLEAN, defaultValue: false }),
     __metadata("design:type", Boolean)
 ], User.prototype, "isActive", void 0);
@@ -79,6 +83,10 @@ __decorate([
     (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.BOOLEAN, defaultValue: false }),
     __metadata("design:type", Boolean)
 ], User.prototype, "isBlocked", void 0);
+__decorate([
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.DATEONLY }),
+    __metadata("design:type", Date)
+], User.prototype, "Activatedat", void 0);
 __decorate([
     (0, sequelize_typescript_1.HasMany)(() => Publish_model_1.Published),
     __metadata("design:type", Array)

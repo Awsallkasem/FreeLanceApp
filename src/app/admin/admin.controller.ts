@@ -1,4 +1,4 @@
-import { Controller, Param, Response, Get, Put, Delete, UnauthorizedException, NotFoundException, UseFilters } from '@nestjs/common';
+import { Controller, Param, Request,Response, Get, Put, Delete, UnauthorizedException, NotFoundException, UseFilters, Post, Body } from '@nestjs/common';
 import { Sequelize } from 'sequelize-typescript';
 import { AdminService } from 'src/app/admin/admin.service';
 import { HttpExceptionFilter } from 'src/filters/global-exception.filter';
@@ -37,8 +37,11 @@ export class AdminContoller {
     
       const blocked = await this.adminService.blockUser(parseInt(id));
       return res.status(200).json({ data: blocked });
-    
-
+  }
+  @Post('updateLicnse')
+  async updateLicnse(@Body('amount') amount:number,@Response() res){
+const updated =await this.adminService.updateLicnces(amount);
+return res.status(200).json({message:'updated'})
 
   }
 }

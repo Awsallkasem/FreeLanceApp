@@ -16,7 +16,7 @@ import { DatabaseModule } from 'src/database/database.module';
       secret: 'your-secret-key',
       signOptions: { expiresIn: '1h' },
     }),
-
+    
   ],
   controllers: [AuthController],
   providers: [AuthService],

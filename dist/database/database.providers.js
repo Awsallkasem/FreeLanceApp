@@ -8,6 +8,8 @@ const rating_model_1 = require("./models/rating.model");
 const freeLance_model_1 = require("./models/freeLance.model");
 const service_model_1 = require("./models/service.model");
 const payment_model_1 = require("./models/payment.model");
+const licnse_model_1 = require("./models/licnse.model");
+const payout_model_1 = require("./models/payout.model");
 exports.databaseProviders = [
     {
         provide: 'SEQUELIZE',
@@ -21,7 +23,7 @@ exports.databaseProviders = [
                 database: 'free',
                 logging: false
             });
-            sequelize.addModels([user_model_1.User, Publish_model_1.Published, rating_model_1.Rating, service_model_1.Service, freeLance_model_1.FreeLance, payment_model_1.Payment]);
+            sequelize.addModels([user_model_1.User, Publish_model_1.Published, rating_model_1.Rating, service_model_1.Service, freeLance_model_1.FreeLance, payment_model_1.Payment, licnse_model_1.Licens, payout_model_1.Payout]);
             await sequelize.sync();
             return sequelize;
         },

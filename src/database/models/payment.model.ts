@@ -31,12 +31,4 @@ userId: number;
 @BelongsTo(() => User)
 user: User;
 
-@ForeignKey(()=>FreeLance)
-@Column({type:DataType.INTEGER,allowNull:false})
-@IsNotEmpty({ message: 'freeLanceId is required' })
-freeLanceId:number
-
-
-@BelongsTo(()=>FreeLance)
-freeLance:FreeLance
 }

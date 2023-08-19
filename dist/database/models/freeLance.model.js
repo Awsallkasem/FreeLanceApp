@@ -15,7 +15,7 @@ const class_validator_1 = require("class-validator");
 const user_model_1 = require("./user.model");
 const rating_model_1 = require("./rating.model");
 const service_model_1 = require("./service.model");
-const payment_model_1 = require("./payment.model");
+const payout_model_1 = require("./payout.model");
 var JobTittle;
 (function (JobTittle) {
     JobTittle["BackEndDeveloper"] = "backend-developer";
@@ -75,9 +75,9 @@ __decorate([
     __metadata("design:type", Array)
 ], FreeLance.prototype, "rating", void 0);
 __decorate([
-    (0, sequelize_typescript_1.HasMany)(() => payment_model_1.Payment),
+    (0, sequelize_typescript_1.HasMany)(() => payout_model_1.Payout),
     __metadata("design:type", Array)
-], FreeLance.prototype, "payments", void 0);
+], FreeLance.prototype, "payouts", void 0);
 __decorate([
     (0, sequelize_typescript_1.HasMany)(() => service_model_1.Service),
     __metadata("design:type", Array)

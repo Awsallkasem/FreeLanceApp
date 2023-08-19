@@ -64,6 +64,10 @@ export class User extends Model<User> implements UserAttributes {
   @IsString({ message: 'phone number must be a string' })
   phone: string;
 
+  @Column({type:DataType.INTEGER ,defaultValue: 0 })
+  walletBalance: number;
+
+
 
   @Column({ type: DataType.BOOLEAN, defaultValue: false })
   isActive: boolean

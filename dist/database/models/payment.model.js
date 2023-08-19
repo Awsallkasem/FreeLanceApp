@@ -13,7 +13,6 @@ exports.Payment = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript");
 const class_validator_1 = require("class-validator");
 const user_model_1 = require("./user.model");
-const freeLance_model_1 = require("./freeLance.model");
 let Payment = class Payment extends sequelize_typescript_1.Model {
 };
 __decorate([
@@ -43,16 +42,6 @@ __decorate([
     (0, sequelize_typescript_1.BelongsTo)(() => user_model_1.User),
     __metadata("design:type", user_model_1.User)
 ], Payment.prototype, "user", void 0);
-__decorate([
-    (0, sequelize_typescript_1.ForeignKey)(() => freeLance_model_1.FreeLance),
-    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.INTEGER, allowNull: false }),
-    (0, class_validator_1.IsNotEmpty)({ message: 'freeLanceId is required' }),
-    __metadata("design:type", Number)
-], Payment.prototype, "freeLanceId", void 0);
-__decorate([
-    (0, sequelize_typescript_1.BelongsTo)(() => freeLance_model_1.FreeLance),
-    __metadata("design:type", freeLance_model_1.FreeLance)
-], Payment.prototype, "freeLance", void 0);
 Payment = __decorate([
     (0, sequelize_typescript_1.Table)({ tableName: 'payment' })
 ], Payment);

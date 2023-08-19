@@ -39,6 +39,10 @@ let AdminContoller = class AdminContoller {
         const blocked = await this.adminService.blockUser(parseInt(id));
         return res.status(200).json({ data: blocked });
     }
+    async updateLicnse(amount, res) {
+        const updated = await this.adminService.updateLicnces(amount);
+        return res.status(200).json({ message: 'updated' });
+    }
 };
 __decorate([
     (0, common_1.Get)('/ShowAllRequest'),
@@ -71,6 +75,14 @@ __decorate([
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], AdminContoller.prototype, "blockUser", null);
+__decorate([
+    (0, common_1.Post)('updateLicnse'),
+    __param(0, (0, common_1.Body)('amount')),
+    __param(1, (0, common_1.Response)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", Promise)
+], AdminContoller.prototype, "updateLicnse", null);
 AdminContoller = __decorate([
     (0, common_1.UseFilters)(global_exception_filter_1.HttpExceptionFilter),
     (0, common_1.Controller)('api/admin'),

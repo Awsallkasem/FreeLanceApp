@@ -16,10 +16,12 @@ exports.AdminService = void 0;
 const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
 const sequelize_1 = require("@nestjs/sequelize");
+const licnse_model_1 = require("../../database/models/licnse.model");
 const user_model_1 = require("../../database/models/user.model");
 let AdminService = class AdminService {
-    constructor(Usermodele, jwtService) {
+    constructor(Usermodele, LicnseModel, jwtService) {
         this.Usermodele = Usermodele;
+        this.LicnseModel = LicnseModel;
         this.jwtService = jwtService;
     }
     async showAllRequest() {
@@ -34,6 +36,10 @@ let AdminService = class AdminService {
     }
     async acceptRequest(id) {
         const user = await this.findUserByIs(id);
+        const date = new Date();
+        const nextMonth = date.getMonth();
+        date.setMonth(nextMonth);
+        user.Activatedat = date;
         user.isActive = true;
         return await user.save();
     }
@@ -56,11 +62,17 @@ let AdminService = class AdminService {
         });
         return user;
     }
+    async updateLicnces(amount) {
+        const licnse = await this.LicnseModel.findByPk(1);
+        licnse.amount = amount;
+        return await licnse.save();
+    }
 };
 AdminService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, sequelize_1.InjectModel)(user_model_1.User)),
-    __metadata("design:paramtypes", [Object, jwt_1.JwtService])
+    __param(1, (0, sequelize_1.InjectModel)(licnse_model_1.Licens)),
+    __metadata("design:paramtypes", [Object, Object, jwt_1.JwtService])
 ], AdminService);
 exports.AdminService = AdminService;
 //# sourceMappingURL=admin.service.js.map
