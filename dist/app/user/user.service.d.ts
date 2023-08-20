@@ -29,7 +29,6 @@ export declare class UserService {
     servicesOnPost(id: number): Promise<Service[]>;
     showFreeLanceinfo(id: number): Promise<{
         freeLance: FreeLance;
-        rate: any;
     }>;
     rateFreeLance(freeLanceId: number, userId: number, rate: number): Promise<number>;
     acceptRequest(serviceId: number, userId: number): Promise<Service>;

@@ -244,7 +244,6 @@ let FreeLanceService = class FreeLanceService {
             date: new Date(),
             category: post.category,
             amount: service.price,
-            isByPoint: true
         });
         await service.save();
         await this.walletService.deposit(freelance.userId, service.price);
@@ -399,7 +398,8 @@ let FreeLanceService = class FreeLanceService {
             freeLanceId: post.freelaneId,
             date: new Date(),
             category: post.category,
-            amount: post.price
+            amount: post.price,
+            isByPoint: true
         });
         await userRequest.save();
         await this.walletService.depositByPoint(freelance.userId, post.price);

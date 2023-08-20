@@ -24,11 +24,11 @@ exports.databaseProviders = [
         useFactory: async () => {
             const sequelize = new sequelize_typescript_1.Sequelize({
                 dialect: 'mysql',
-                host: 'localhost',
-                port: 3306,
-                username: 'free',
-                password: 'free',
-                database: 'free',
+                host: 'localhost' || process.env.DB_HOST,
+                port: 3306 || parseInt(process.env.DB_PORT),
+                username: 'free' || process.env.DB_USERNAME,
+                password: 'free' || process.env.DB_PASSWORD,
+                database: 'free' || process.env.DB_DATABASE,
                 logging: false
             });
             sequelize.addModels([user_model_1.User, post_model_1.Posts, rating_model_1.Rating, packgs_model_1.Packgs, service_model_1.Service, payAndRecive_model_1.PayAndRecive, postWithPoint_model_1.postWithPoint, complaint_model_1.Complaint, category_model_1.Category, userRequest_model_1.UserRequest, staggingToPoint_model_1.StaggingToPoint, freeLance_model_1.FreeLance, interest_model_1.Ineterest, payment_model_1.Payment, payout_model_1.Payout, stagging_model_1.Stagging]);

@@ -20,6 +20,7 @@ export declare class FreeLance extends Model<FreeLance> {
     link: string;
     jobTittle: JobTittle;
     userId: number;
+    rate: number;
     user: User;
     rating: Rating[];
     payouts: Payout[];

@@ -44,6 +44,7 @@ export class UserService {
     private readonly walletService: WalletService,
     @InjectModel(Complaint)
     private readonly complaintModele:typeof Complaint,
+    @InjectModel(Rating)
     private readonly jwtService: JwtService,
 
   ) { }
@@ -97,7 +98,7 @@ export class UserService {
     }
     return service;
   }
-  async showFreeLanceinfo(id: number): Promise<{ freeLance: FreeLance, rate: any }> {
+  async showFreeLanceinfo(id: number): Promise<{ freeLance: FreeLance }> {
     const freeLance = await this.freeLanceModel.findOne({
       where: { id: id }, include: [{
         model: User,
@@ -107,11 +108,15 @@ export class UserService {
     if (!freeLance) {
       throw new NotFoundException('free lance not found');
     }
-    const rate = await freeLance.calculateRating();
-    return { freeLance: freeLance, rate: rate };
+   
+    return { freeLance: freeLance};
   }
 
   async rateFreeLance(freeLanceId: number, userId: number, rate: number): Promise<number> {
+    const isExist=await this.ratingModele.findOne({where:{userId:userId,freelaneId:freeLanceId}});
+    if(isExist){
+      throw new BadRequestException('the user already rated this one');
+    }
     const rating = new Rating({
       userId: userId,
       freelaneId: freeLanceId,
@@ -124,8 +129,10 @@ export class UserService {
       throw new BadRequestException(errorMessages);
     }
 
-    await rating.save();
+    await this.ratingModele.create(rating.dataValues);
     const freeLance = await this.freeLanceModel.findByPk(freeLanceId);
+    freeLance.rate=await freeLance.calculateRating();
+    await freeLance.save();
     return await freeLance.calculateRating();
   }
 

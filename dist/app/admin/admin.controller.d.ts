@@ -12,4 +12,5 @@ export declare class AdminContoller {
     statisticalsNumFreeLance(res: any): Promise<any>;
     showComplaint(): Promise<import("../../database/models/complaint.model").Complaint[]>;
     statisticalsComplaint(): Promise<any[]>;
+    returnHisCoin(complaintId: number, res: any): Promise<import("../../database/models/user.model").User>;
 }

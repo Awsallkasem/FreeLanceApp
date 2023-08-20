@@ -103,7 +103,7 @@ let paymentService = class paymentService {
             acttuallMoney += amount - Math.ceil(amount * 0.05);
         }
         if (point >= 5) {
-            acttuallMoney += point - Math.ceil(point * 0.5);
+            acttuallMoney += point - Math.ceil(point * 0.9);
         }
         const authHeader = Buffer.from('AQ0lkpBSIK9roOaQe3hx2RBpwp4B4J0Pg9hf8qNma4ldJ6Ed1DbYU7i_YnvW0DaS0XlB0kiRUkYKegbA:EHxX5I1KHvgn88vahZNJstKK-6Nh-z7Kb0865JohnAb-nFciadAR2fOfgKob9ccv1qJYZJqE8i3F7LA0').toString('base64');
         const config = {

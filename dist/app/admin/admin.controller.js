@@ -61,6 +61,10 @@ let AdminContoller = class AdminContoller {
     async statisticalsComplaint() {
         return await this.adminService.statisticalsComplaint();
     }
+    async returnHisCoin(complaintId, res) {
+        const complaintResult = await this.adminService.returnHisCoin(complaintId);
+        return complaintResult;
+    }
 };
 __decorate([
     (0, common_1.Get)('/ShowAllRequest'),
@@ -133,6 +137,14 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], AdminContoller.prototype, "statisticalsComplaint", null);
+__decorate([
+    (0, common_1.Post)('returnHisCoin'),
+    __param(0, (0, common_1.Body)('complaintId')),
+    __param(1, (0, common_1.Response)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", Promise)
+], AdminContoller.prototype, "returnHisCoin", null);
 AdminContoller = __decorate([
     (0, common_1.UseFilters)(global_exception_filter_1.HttpExceptionFilter),
     (0, common_1.Controller)('api/admin'),

@@ -26,9 +26,6 @@ let WalletController = class WalletController {
     async deposit(id, amount) {
         return this.walletService.deposit(id, amount);
     }
-    async transfer(from, to, amount) {
-        return this.walletService.transfer(from, to, amount);
-    }
 };
 __decorate([
     (0, common_1.Get)(':id/balance'),
@@ -45,15 +42,6 @@ __decorate([
     __metadata("design:paramtypes", [Number, Number]),
     __metadata("design:returntype", Promise)
 ], WalletController.prototype, "deposit", null);
-__decorate([
-    (0, common_1.Post)(':from/transfer/:to'),
-    __param(0, (0, common_1.Param)('from')),
-    __param(1, (0, common_1.Param)('to')),
-    __param(2, (0, common_1.Body)('amount')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Number, Number]),
-    __metadata("design:returntype", Promise)
-], WalletController.prototype, "transfer", null);
 WalletController = __decorate([
     (0, common_1.UseFilters)(global_exception_filter_1.HttpExceptionFilter),
     (0, common_1.Controller)('wallet'),

@@ -22,10 +22,11 @@ const payAndRecive_model_1 = require("../../database/models/payAndRecive.model")
 const service_model_1 = require("../../database/models/service.model");
 const user_model_1 = require("../../database/models/user.model");
 let AdminService = class AdminService {
-    constructor(Usermodele, payAndReciveModele, complaintModele, jwtService) {
+    constructor(Usermodele, payAndReciveModele, complaintModele, freeLanceModele, jwtService) {
         this.Usermodele = Usermodele;
         this.payAndReciveModele = payAndReciveModele;
         this.complaintModele = complaintModele;
+        this.freeLanceModele = freeLanceModele;
         this.jwtService = jwtService;
     }
     async showAllRequest() {
@@ -49,10 +50,11 @@ let AdminService = class AdminService {
         return await user.save();
     }
     async blockUser(id) {
-        const user = await this.findUserById(id);
-        if (user.role == user_model_1.UserRole.ADMIN) {
-            throw new common_1.UnauthorizedException('access denied');
+        const freeLance = await this.freeLanceModele.findByPk(id);
+        if (!freeLance) {
+            throw new common_1.NotFoundException();
         }
+        const user = await this.findUserById(freeLance.userId);
         user.isBlocked = true;
         return await user.save();
     }
@@ -126,13 +128,41 @@ let AdminService = class AdminService {
         }
         return complaints;
     }
+    async returnHisCoin(complaintId) {
+        if (!complaintId) {
+            throw new common_1.BadRequestException('enter required fields');
+        }
+        const complaints = await this.complaintModele.findOne({ where: { id: complaintId },
+            include: [{
+                    model: user_model_1.User,
+                    attributes: { exclude: ['password', 'updatedAt', 'createdAt', 'isBlocked', 'isReject', 'isActive'] },
+                },
+                {
+                    model: service_model_1.Service,
+                    include: [{
+                            model: freeLance_model_1.FreeLance,
+                            include: [{
+                                    model: user_model_1.User,
+                                    attributes: { exclude: ['password', 'updatedAt', 'createdAt', 'isBlocked', 'isReject', 'isActive'] },
+                                }]
+                        }]
+                }]
+        });
+        const user = await this.findUserById(complaints.userId);
+        if (!user) {
+            throw new common_1.NotFoundException('there no data');
+        }
+        user.walletBalance += complaints.service.price;
+        return await user.save();
+    }
 };
 AdminService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, sequelize_1.InjectModel)(user_model_1.User)),
     __param(1, (0, sequelize_1.InjectModel)(payAndRecive_model_1.PayAndRecive)),
     __param(2, (0, sequelize_1.InjectModel)(complaint_model_1.Complaint)),
-    __metadata("design:paramtypes", [Object, Object, Object, jwt_1.JwtService])
+    __param(3, (0, sequelize_1.InjectModel)(freeLance_model_1.FreeLance)),
+    __metadata("design:paramtypes", [Object, Object, Object, Object, jwt_1.JwtService])
 ], AdminService);
 exports.AdminService = AdminService;
 //# sourceMappingURL=admin.service.js.map

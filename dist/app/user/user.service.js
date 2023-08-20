@@ -99,10 +99,13 @@ let UserService = class UserService {
         if (!freeLance) {
             throw new common_1.NotFoundException('free lance not found');
         }
-        const rate = await freeLance.calculateRating();
-        return { freeLance: freeLance, rate: rate };
+        return { freeLance: freeLance };
     }
     async rateFreeLance(freeLanceId, userId, rate) {
+        const isExist = await this.ratingModele.findOne({ where: { userId: userId, freelaneId: freeLanceId } });
+        if (isExist) {
+            throw new common_1.BadRequestException('the user already rated this one');
+        }
         const rating = new rating_model_1.Rating({
             userId: userId,
             freelaneId: freeLanceId,
@@ -113,8 +116,10 @@ let UserService = class UserService {
             const errorMessages = validationErrors.map((error) => Object.values(error.constraints));
             throw new common_1.BadRequestException(errorMessages);
         }
-        await rating.save();
+        await this.ratingModele.create(rating.dataValues);
         const freeLance = await this.freeLanceModel.findByPk(freeLanceId);
+        freeLance.rate = await freeLance.calculateRating();
+        await freeLance.save();
         return await freeLance.calculateRating();
     }
     async acceptRequest(serviceId, userId) {
@@ -327,6 +332,7 @@ UserService = __decorate([
     __param(7, (0, sequelize_1.InjectModel)(userRequest_model_1.UserRequest)),
     __param(8, (0, sequelize_1.InjectModel)(postWithPoint_model_1.postWithPoint)),
     __param(10, (0, sequelize_1.InjectModel)(complaint_model_1.Complaint)),
+    __param(11, (0, sequelize_1.InjectModel)(rating_model_1.Rating)),
     __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object, Object, Object, Object, wallet_service_1.WalletService, Object, jwt_1.JwtService])
 ], UserService);
 exports.UserService = UserService;

@@ -43,29 +43,6 @@ let WalletService = class WalletService {
         await user.save();
         return user.walletBalance;
     }
-    async transfer(fromUserId, toUserId, amount) {
-        const fromUser = await this.userModel.findOne({ where: { id: fromUserId } });
-        const toUser = await this.userModel.findOne({ where: { id: toUserId } });
-        if (!fromUser || !toUser) {
-            throw new common_1.NotFoundException('Invalid user ID');
-        }
-        if (fromUser.walletBalance < amount) {
-            throw new common_1.BadRequestException('Insufficient balance');
-        }
-        fromUser.walletBalance -= amount;
-        toUser.walletBalance += amount;
-        try {
-            await this.userModel.sequelize.transaction(async (t) => {
-                const transactionHost = { transaction: t };
-                fromUser.save(transactionHost);
-                toUser.save(transactionHost);
-            });
-        }
-        catch (e) {
-            throw new Error(e);
-        }
-        return { fromWalletBalance: fromUser.walletBalance, toWalletBalance: toUser.walletBalance };
-    }
 };
 WalletService = __decorate([
     (0, common_1.Injectable)(),

@@ -46,7 +46,8 @@ export class FreeLance extends Model<FreeLance>  {
   @Column({type:DataType.INTEGER,allowNull:false})
   @IsNotEmpty({ message: 'userId is required' })
   userId: number;
-
+@Column({type:DataType.FLOAT})
+rate:number;
 
   @BelongsTo(() => User)
   user: User;

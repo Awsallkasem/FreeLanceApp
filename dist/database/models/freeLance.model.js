@@ -65,6 +65,10 @@ __decorate([
     __metadata("design:type", Number)
 ], FreeLance.prototype, "userId", void 0);
 __decorate([
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.FLOAT }),
+    __metadata("design:type", Number)
+], FreeLance.prototype, "rate", void 0);
+__decorate([
     (0, sequelize_typescript_1.BelongsTo)(() => user_model_1.User),
     __metadata("design:type", user_model_1.User)
 ], FreeLance.prototype, "user", void 0);
